@@ -19,6 +19,9 @@
 <!-- Select2 -->
 <link href="{{ asset('assets/vendor/css/select2.css') }}" rel="stylesheet" />
 
+<!-- Leaflet JS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"/>
+
 <!-- Vendor Styles -->
 @yield('vendor-style')
 

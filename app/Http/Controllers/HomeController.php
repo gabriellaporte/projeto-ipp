@@ -8,29 +8,25 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('auth');
     }
 
     /**
-     * Show the application dashboard.
+     * Mostra o index do sistema
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
     {
-      $users = QueryBuilder::for(User::class)
-          ->allowedFilters('name')
-          ->orderBy('name', 'asc')
-          ->paginate(5);
+        $users = QueryBuilder::for(User::class)
+            ->allowedFilters('name')
+            ->allowedSorts('name')
+            ->orderBy('name', 'asc')
+            ->paginate(5);
 
-      return view('content.index')
-        ->with('users', $users);
+        return view('content.index')
+            ->with('users', $users);
     }
 }

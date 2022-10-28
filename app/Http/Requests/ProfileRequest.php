@@ -27,41 +27,42 @@ class ProfileRequest extends FormRequest
     public function rules()
     {
         return [
-          'profilePicture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:4000',
-          'userName' => 'required|string',
-          'emailAddress' => 'required|email',
-          'mobilePhone' => ['nullable', 'string', new MobilePhoneRule()],
-          'housePhone' => ['nullable', 'string', new HousePhoneRule()],
-          'birthDate' => ['required', 'string', new DateStringRule()],
-          'enrollmentOrigin' => 'nullable|string',
-          'enrollmentDate' => ['nullable', 'string', new DateStringRule()],
-          'gender' => 'nullable|string',
-          'roles' => 'nullable|array'
+            'profilePicture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:4000',
+            'userName' => 'required|string|unique:users,name',
+            'emailAddress' => 'required|email',
+            'mobilePhone' => ['nullable', 'string', new MobilePhoneRule()],
+            'housePhone' => ['nullable', 'string', new HousePhoneRule()],
+            'birthDate' => ['required', 'string', new DateStringRule()],
+            'enrollmentOrigin' => 'nullable|string',
+            'enrollmentDate' => ['nullable', 'string', new DateStringRule()],
+            'gender' => 'nullable|string',
+            'roles' => 'nullable|array'
         ];
     }
 
     public function messages()
     {
-      return [
-        'emailAddress.required' => 'O campo de email é obrigatório.',
-        'userName.required' => 'O campo de nome é obrigatório.',
-        'gender.required' => 'O campo de gênero é obrigatório.',
-        'roles.required' => 'O campo de cargos é obrigatório.',
-        'birthDate.required' => 'O campo de data de nascimento é obrigatório.',
-        'profilePicture.image' => 'A sua foto de perfil precisa ser uma imagem.',
-        'profilePicture.mimes' => 'A sua foto de perfil deve estar no formato JPG, JPEG, PNG ou GIF.',
-        'profilePicture.max' => 'A sua foto de perfil só pode ter até 4 MB de tamanho.',
-        'emailAddress.email' => 'O email informado está no formato inválido.',
-      ];
+        return [
+            'emailAddress.required' => 'O campo de email é obrigatório.',
+            'userName.required' => 'O campo de nome é obrigatório.',
+            'userName.unique' => 'O nome informado já existe.',
+            'gender.required' => 'O campo de gênero é obrigatório.',
+            'roles.required' => 'O campo de cargos é obrigatório.',
+            'birthDate.required' => 'O campo de data de nascimento é obrigatório.',
+            'profilePicture.image' => 'A foto de perfil precisa ser uma imagem.',
+            'profilePicture.mimes' => 'A foto de perfil deve estar no formato JPG, JPEG, PNG ou GIF.',
+            'profilePicture.max' => 'A foto de perfil só pode ter até 4 MB de tamanho.',
+            'emailAddress.email' => 'O email informado está no formato inválido.'
+          ];
     }
 
     public function attributes()
     {
-      return [
-        'birthDate' => 'data de nascimento',
-        'enrollmentDate' => 'data de arrolamento',
-        'mobilePhone' => 'celular',
-        'housePhone' => 'telefone fixo',
-      ];
+        return [
+            'birthDate' => 'data de nascimento',
+            'enrollmentDate' => 'data de arrolamento',
+            'mobilePhone' => 'celular',
+            'housePhone' => 'telefone fixo',
+        ];
     }
 }

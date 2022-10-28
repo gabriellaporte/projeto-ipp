@@ -22,7 +22,7 @@ return new class extends Migration
             $table->rememberToken();
             $table->string('mobile_phone')->nullable();
             $table->string('house_phone')->nullable();
-            $table->date('birth_date')->nullable();
+            $table->date('birth_date');
             $table->enum('gender', ['M', 'F']);
             $table->date('enrollment_date')->nullable();
             $table->string('enrollment_origin')->nullable();

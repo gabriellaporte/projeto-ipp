@@ -11,32 +11,40 @@ use Illuminate\Support\Facades\Session;
 class AuthController extends Controller
 {
 
-  // Index (página de login)
-  public function showLoginPage()
-  {
-    if(Auth::check()) {
-      return redirect()
-        ->route('index')
-        ->withWarning('Você já está autenticado!');
+    /**
+     *
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function showLoginPage()
+    {
+        if (Auth::check()) {
+            return redirect()
+                ->route('index')
+                ->withWarning('Você já está autenticado!');
+        }
+
+        return view('content.authentications.login');
     }
 
-    return view('content.authentications.login');
-  }
+    /**
+     * Função responsável pelo logout de usuários
+     *
+     * @return mixed
+     */
+    public function logout()
+    {
+        Session::flush();
+        Auth::logout();
 
-  // Função responsável pelo logoutt
-  public function logout()
-  {
-    Session::flush();
-    Auth::logout();
+        return redirect()
+            ->route('login')
+            ->withWarning('Você se desconectou.');
+    }
 
-    return redirect()
-      ->route('login')
-      ->withWarning('Você se desconectou.');
-  }
-
-  // Index (página de recover password)
-  public function showRecoverPasswordPage()
-  {
-    return view('content.authentications.forgot-password');
-  }
+    // Index (página de recover password)
+    public function showRecoverPasswordPage()
+    {
+        return view('content.authentications.forgot-password');
+    }
 }
