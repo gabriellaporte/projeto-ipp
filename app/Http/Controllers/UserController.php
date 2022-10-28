@@ -30,13 +30,13 @@ class UserController extends Controller
         $user->email = $request->emailAddress;
         $user->mobile_phone = $request->mobilePhone;
         $user->house_phone = $request->housePhone;
-        $user->birth_date = Carbon::createFromFormat('d/m/Y', $request->birthDate)->format('y-m-d');
+        $user->birth_date = Carbon::createFromFormat('d/m/Y', $request->birthDate)->format('Y-m-d');
         $user->name = $request->userName;
 
         $user->enrollment_origin = $request->enrollmentOrigin ?? $user->enrollment_origin;
 
         if (!is_null($request->enrollmentDate)) {
-            $user->enrollment_date = Carbon::createFromFormat('d/m/Y', $request->enrollmentDate)->format('y-m-d');
+            $user->enrollment_date = Carbon::createFromFormat('d/m/Y', $request->enrollmentDate)->format('Y-m-d');
         } else {
             $user->enrollment_date = null;
         }

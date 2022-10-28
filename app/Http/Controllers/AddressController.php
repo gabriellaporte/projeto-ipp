@@ -26,7 +26,7 @@ class AddressController extends Controller
     {
         $user = User::find($id) ?? auth()->user();
 
-        if (!CanEditUser($id)) {
+        if (!CanEditUser($id ?? auth()->user()->id)) {
             return redirect()
                 ->back()
                 ->withErrors('Você não tem permissão para editar os endereços deste usuário.')
@@ -75,7 +75,7 @@ class AddressController extends Controller
     {
         $user = User::find($id) ?? auth()->user();
 
-        if (!CanEditUser($id)) {
+        if (!CanEditUser($id ?? auth()->user()->id)) {
             return redirect()
                 ->back()
                 ->withErrors('Você não tem permissão para editar os endereços deste usuário')

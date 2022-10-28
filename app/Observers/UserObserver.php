@@ -2,10 +2,14 @@
 
 namespace App\Observers;
 
+use App\Models\NotificationSetting;
 use App\Models\User;
 
 class UserObserver
 {
+    private $notifications = ['system_tithes_notification', 'system_offers_notification', 'system_birthdate_notification',
+        'email_tithes_notification', 'email_offers_notification', 'email_birthday_notification', 'email_system_notification'];
+
     /**
      * Handle the User "created" event.
      *
@@ -14,7 +18,14 @@ class UserObserver
      */
     public function created(User $user)
     {
-        $user->syncRoles([3]);
+        $user->assignRole('Membro');
+
+        foreach($this->notifications as $notification) {
+            NotificationSetting::create([
+                'user_id' => $user->id,
+                'name' => $notification,
+            ]);
+        }
     }
 
     /**

@@ -60,32 +60,23 @@ class MemberController extends AdminController
     public function store(ProfileRequest $request) {
         $user = new User;
 
-        $user->email = $request->emailAddress;
-        $user->password = Hash::make(Str::random(6));
-        $user->mobile_phone = $request->mobilePhone;
-        $user->house_phone = $request->housePhone;
-        $user->birth_date = Carbon::createFromFormat('d/m/Y', $request->birthDate)->format('y-m-d');
-        $user->name = $request->userName;
+        $user = User::create([
+            'name' => $request->userName,
+            'email' => $request->emailAddress,
+            'password' => Hash::make(Str::random(6)),
+            'mobile_phone' => $request->mobilePhone,
+            'house_phone' => $request->housePhone,
+            'birth_date' => Carbon::createFromFormat('d/m/Y', $request->birthDate)->format('Y-m-d'),
+            'enrollment_origin' => $request->enrollmentOrigin,
+            'enrollment_date' => !is_null($request->enrollmentDate) ? Carbon::createFromFormat('d/m/Y', $request->enrollmentDate)->format('Y-m-d') : null,
+            'gender' => $request->gender,
+        ]);
 
-        $user->enrollment_origin = $request->enrollmentOrigin ?? $user->enrollment_origin;
-
-        if (!is_null($request->enrollmentDate)) {
-            $user->enrollment_date = Carbon::createFromFormat('d/m/Y', $request->enrollmentDate)->format('y-m-d');
-        } else {
-            $user->enrollment_date = null;
-        }
-
-        $user->gender = $request->gender ?? $user->gender;
-
-        if (!is_null($request->profilePicture)) {
+        if(!is_null($request->profilePicture))
+        {
             $storeFile = $request->profilePicture->store('img/avatars');
-
             $user->profile_picture = $storeFile;
         }
-
-        $user->save();
-
-        $user->assignRole('Membro');
 
         return redirect()
             ->back()

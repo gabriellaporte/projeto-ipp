@@ -29,7 +29,7 @@
                             </tr>
                             </thead>
                             <tbody class="table-border-bottom-0">
-                            @forelse($users as $user)
+                            @forelse($users->sortBy(fn($e) => \Carbon\Carbon::parse($e->birth_date)->format('d')) as $user)
                                 <tr>
                                     <td class="d-flex justify-content-center">
                                         <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"

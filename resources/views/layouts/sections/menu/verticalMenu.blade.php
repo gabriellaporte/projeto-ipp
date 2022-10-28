@@ -68,6 +68,7 @@
             </a>
         </li>
 
+        @hasrole('Oficial')
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Oficiais</span>
         </li>
@@ -78,6 +79,7 @@
                 <div>Membros</div>
             </a>
         </li>
+        @endhasrole
     </ul>
 
 </aside>

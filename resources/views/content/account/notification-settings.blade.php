@@ -174,7 +174,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="d-flex w-100 justify-content-end">
+                    <div class="pt-3 d-flex w-100 justify-content-end">
                         <button type="submit" class="btn btn-outline-primary">Salvar</button>
                     </div>
                 </form>
