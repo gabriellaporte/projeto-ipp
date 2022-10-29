@@ -20,78 +20,7 @@
                         </button>
                     </form>
                 </div>
-                <div class="table-responsive text-nowrap">
-                    <table class="table table-hover">
-                        <thead>
-                        <tr>
-                            <th class="text-center">#</th>
-                            <th>
-                                <a href="{{ route('admin.users', [] + (!request()->has('sort') || request()->get('sort') == 'name' ? ['sort' => '-name'] : ['sort' => 'name'])) }}">Nome
-                                    <i class='bx bx-filter'></i>
-                                </a>
-                            </th>
-                            <th>E-mail</th>
-                            <th>Telefone</th>
-                            <th>Aniversário</th>
-                            <th>Status</th>
-                            <th>Ações</th>
-                        </tr>
-                        </thead>
-                        <tbody class="table-border-bottom-0">
-                        @foreach($users as $user)
-                            <tr>
-                                <td class="d-flex justify-content-center">
-                                    <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                                        class="avatar avatar-xs pull-up" title=""
-                                        data-bs-original-title="Foto de {{ explode(' ', $user->name)[0] }}"><img
-                                            src="{{asset('storage/' . $user->profile_picture )}}" alt="Avatar"
-                                            class="rounded-circle"></li>
-                                </td>
-                                <td><strong>{{ $user->name  }}</strong></td>
-                                <td>{{ $user->email }}</td>
-                                <td>{{ $user->mobile_phone  }}</td>
-                                <td>{{ \Carbon\Carbon::parse($user->birth_date)->translatedFormat('d/m/Y')  }}</td>
-                                <td>
-                                    @if($user->hasRole(['Oficial']))
-                                        <span class="badge bg-label-info me-1">Oficial</span>
-                                    @else
-                                        <span class="badge bg-label-primary me-1">Membro</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    <div class="dropdown">
-                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                                                data-bs-toggle="dropdown"
-                                                aria-expanded="true"><i class="bx bx-dots-vertical-rounded"></i>
-                                        </button>
-                                        <div class="dropdown-menu"
-                                             style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate(-145px, 27px);"
-                                             data-popper-placement="bottom-end">
-                                            @can('users.edit')
-                                                <a class="dropdown-item show-addresses" href="javascript:void(0);" data-user-id="{{ $user->id }}" data-user-name="{{ $user->getShortName() }}">
-                                                    <i class="bx bx-id-card me-1"></i>
-                                                    Endereços
-                                                </a>
-                                                <a class="dropdown-item" href="{{ route('admin.user.show', $user->id) }}">
-                                                    <i class="bx bx-edit-alt me-1"></i>
-                                                    Editar
-                                                </a>
-                                                <a class="dropdown-item delete-user" data-user-id="{{ $user->id }}" href="javascript:void(0);" style="color: red;">
-                                                    <i class="bx bx-trash-alt me-1"></i>
-                                                    Excluir
-                                                </a>
-                                            @endcan
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                </div>
-                <div class="d-flex w-100 justify-content-center mt-4">
-                    {!! $users->links() !!}
-                </div>
+                @include('_partials.users_table')
             </div>
 
         </div>

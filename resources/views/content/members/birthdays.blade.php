@@ -31,7 +31,7 @@
                             <tbody class="table-border-bottom-0">
                             @forelse($users->sortBy(fn($e) => \Carbon\Carbon::parse($e->birth_date)->format('d')) as $user)
                                 <tr>
-                                    <td class="d-flex justify-content-center">
+                                    <td class="d-flex justify-content-center" style="display: table-cell !important;">
                                         <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
                                             class="avatar avatar-xs pull-up" title=""
                                             data-bs-original-title="Foto de {{ explode(' ', $user->name)[0] }}"><img
