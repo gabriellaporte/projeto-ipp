@@ -53,16 +53,31 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * Retorna todos endereços vinculados ao usuário
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function addresses()
     {
         return $this->hasMany(Address::class, 'user_id');
     }
 
+    /**
+     * Retorna as configurações de notificação do usuário
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function notificationSettings()
     {
         return $this->hasMany(NotificationSetting::class, 'user_id');
     }
 
+    /**
+     * Retorna o primeiro nome do usuário
+     *
+     * @return string
+     */
     public function getShortName()
     {
         return explode(' ', $this->name)[0];
