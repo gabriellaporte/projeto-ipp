@@ -3,11 +3,13 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AdminNotificationController;
 use App\Http\Controllers\Admin\MemberController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\UserController;
+use App\Models\Notification;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
@@ -49,6 +51,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::post('/membros/store', [MemberController::class, 'store'])->name('users.store');
     Route::get('/membros/delete/{id}', [MemberController::class, 'delete'])->name('users.delete');
     Route::get('/membro/{id}', [MemberController::class, 'showEditUser'])->name('user.show');
+
+    Route::get('/notificacoes', [AdminNotificationController::class, 'showNotifications'])->name('notifications');
+    Route::post('/notificacoes/store', [AdminNotificationController::class, 'storeNotification'])->name('notifications.store');
 });
 
 // Usuário

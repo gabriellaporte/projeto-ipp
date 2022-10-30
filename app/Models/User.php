@@ -82,4 +82,14 @@ class User extends Authenticatable
     {
         return explode(' ', $this->name)[0];
     }
+
+    /**
+     * Retorna as notificações do usuário
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function notifications()
+    {
+        return $this->hasMany(UserNotification::class, 'user_id');
+    }
 }

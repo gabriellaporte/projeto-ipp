@@ -79,6 +79,13 @@
                 <div>Membros</div>
             </a>
         </li>
+
+        <li class="menu-item {{ request()->routeIs('admin.notifications') ? 'active' : '' }}">
+            <a href="{{ route('admin.notifications') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-bell-plus"></i>
+                <div>Notificações</div>
+            </a>
+        </li>
         @endhasrole
     </ul>
 

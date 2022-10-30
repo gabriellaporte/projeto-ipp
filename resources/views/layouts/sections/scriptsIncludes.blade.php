@@ -24,6 +24,9 @@
 <!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
 
+<!-- Tagify -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.16.4/tagify.min.js"></script>
+
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async="async" src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
 <script>

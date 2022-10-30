@@ -22,6 +22,9 @@
 <!-- Leaflet JS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"/>
 
+<!-- Tagify -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.16.4/tagify.min.css"/>
+
 <!-- Vendor Styles -->
 @yield('vendor-style')
 
