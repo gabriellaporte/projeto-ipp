@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\NotificationSettingsController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
 use App\Models\Notification;
 use Illuminate\Support\Facades\Route;
@@ -35,6 +36,11 @@ Route::get('/login', [AuthController::class, 'showLoginPage'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login-authentication');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/recuperar-senha', [AuthController::class, 'showRecoverPasswordPage'])->name('recover-password');
+
+// Pesquisa
+Route::group(['middleware' => 'auth', 'prefix' => 'pesquisa', 'as' => 'search.'], function () {
+    Route::get('/membros', [SearchController::class, 'searchUsers'])->name('members');
+});
 
 // Minha Conta
 Route::group(['middleware' => 'auth', 'prefix' => 'minha-conta', 'as' => 'account.'], function () {

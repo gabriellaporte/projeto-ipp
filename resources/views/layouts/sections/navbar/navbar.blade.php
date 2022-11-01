@@ -38,7 +38,9 @@ $navbarDetached = ($navbarDetached ?? '');
         <!-- Search -->
         <div class="navbar-nav align-items-center">
           <div class="nav-item d-flex align-items-center">
-              <button class="btn btn-outline-secondary d-flex gap-1"><i class="bx bx-search fs-4 lh-0"></i> FILTRO AVANÇADO</button>
+              <button class="btn btn-outline-secondary d-flex gap-1" id="advancedSearch" data-bs-toggle="modal" data-bs-target="#advancedSearchModal">
+                  <i class="bx bx-search fs-4 lh-0"></i> PESQUISAR
+              </button>
           </div>
 
         </div>
