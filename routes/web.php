@@ -54,6 +54,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
 
     Route::get('/notificacoes', [AdminNotificationController::class, 'showNotifications'])->name('notifications');
     Route::post('/notificacoes/store', [AdminNotificationController::class, 'storeNotification'])->name('notifications.store');
+    Route::post('/notificacoes/edit', [AdminNotificationController::class, 'editNotification'])->name('notifications.edit');
+    Route::get('/notificacoes/delete/{id}', [AdminNotificationController::class, 'deleteNotification'])->name('notifications.delete');
 });
 
 // Usuário
