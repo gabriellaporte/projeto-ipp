@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\MemberController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\NotificationSettingsController;
 use App\Http\Controllers\UserController;
 use App\Models\Notification;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +40,9 @@ Route::get('/recuperar-senha', [AuthController::class, 'showRecoverPasswordPage'
 Route::group(['middleware' => 'auth', 'prefix' => 'minha-conta', 'as' => 'account.'], function () {
     Route::get('/', [AccountController::class, 'showAccountSettings'])->name('settings');
     Route::get('/notificacoes/config', [AccountController::class, 'showNotificationSettings'])->name('notifications.settings');
+
+    Route::get('/notificacoes', [NotificationController::class, 'index'])->name('notifications');
+    Route::get('/notificacoes/read/{ìd}', [NotificationController::class, 'readNotification'])->name('notifications.read');
 });
 
 // Membros
@@ -67,4 +71,4 @@ Route::get('/addresses/flush/{id?}', [AddressController::class, 'deleteAddresses
 Route::get('/addresses/{id}/destroy', [AddressController::class, 'destroy'])->name('addresses.delete');
 
 // Notificações
-Route::post('/notificacoes/sync/', [NotificationController::class, 'syncNotifications'])->name('notifications.sync');
+Route::post('/notificacoes/sync/', [NotificationSettingsController::class, 'syncNotifications'])->name('notifications.sync');

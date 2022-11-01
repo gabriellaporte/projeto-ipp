@@ -78,7 +78,7 @@ $navbarDetached = ($navbarDetached ?? '');
                 </a>
               </li>
               <li>
-                <a class="dropdown-item" href="javascript:void(0);">
+                <a class="dropdown-item" href="{{ route('account.notifications') }}">
                   <span class="d-flex align-items-center align-middle">
                       <i class="flex-shrink-0 bx bx-bell me-2 pe-1"></i>
                       <span class="flex-grow-1 align-middle">Notificações</span>

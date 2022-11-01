@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\NotificationSetting;
+use App\Models\Notification;
+use App\Models\UserNotification;
 use Illuminate\Http\Request;
 
 class NotificationController extends Controller
@@ -13,48 +14,46 @@ class NotificationController extends Controller
     }
 
     /**
-     * Sincroniza as notificações do usuário enviadas pela requisição ($request)
+     * Retorna a view de notificações do usuário
      *
-     * @param Request $request | A requisição em método POST
-     * @return void
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
-    public function syncNotifications(Request $request)
-    {
+    public function index() {
+        $userNotifications = auth()->user()->notifications()->orderBy('id', 'desc')->paginate(5);
 
-        !is_null($request->system_tithes_notification) ? $this->changeNotification(auth()->user()->id, 'system_tithes_notification', true) : $this->changeNotification(auth()->user()->id, 'system_tithes_notification', false);
-        !is_null($request->system_offers_notification) ? $this->changeNotification(auth()->user()->id, 'system_offers_notification', true) : $this->changeNotification(auth()->user()->id, 'system_offers_notification', false);
-        !is_null($request->system_birthdate_notification) ? $this->changeNotification(auth()->user()->id, 'system_birthdate_notification', true) : $this->changeNotification(auth()->user()->id, 'system_birthdate_notification', false);
-        !is_null($request->email_tithes_notification) ? $this->changeNotification(auth()->user()->id, 'email_tithes_notification', true) : $this->changeNotification(auth()->user()->id, 'email_tithes_notification', false);
-        !is_null($request->email_offers_notification) ? $this->changeNotification(auth()->user()->id, 'email_offers_notification', true) : $this->changeNotification(auth()->user()->id, 'email_offers_notification', false);
-        !is_null($request->email_birthday_notification) ? $this->changeNotification(auth()->user()->id, 'email_birthday_notification', true) : $this->changeNotification(auth()->user()->id, 'email_birthday_notification', false);
-        !is_null($request->email_system_notification) ? $this->changeNotification(auth()->user()->id, 'email_system_notification', true) : $this->changeNotification(auth()->user()->id, 'email_system_notification', false);
-
-        return redirect()
-            ->back()
-            ->withSuccess('Você atualizou as suas configurações de notificações com sucesso!');
+        return view('content.account.notifications')
+            ->with('notifications', $userNotifications);
     }
 
     /**
-     * Função responsável por alterar uma notificação ($name, $value) de um usuário ($id). Se não tiver, cria com os parâmetros informados.
+     * Marca uma notificação como lida
      *
-     * @param $id | O ID do usuário a ser modificado
-     * @param $name | A "chave" da notificação, ou, o nome dela
-     * @param boolean $value | O valor (true ou false)
-     * @return void
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function changeNotification($id, $name, bool $value)
-    {
-        $notSetting = NotificationSetting::where('user_id', $id)->where('name', $name)->first();
+    public function readNotification($id) {
+        $notification = UserNotification::find($id);
 
-        if (is_null($notSetting)) {
-            $notSetting = new NotificationSetting;
+        if(is_null($notification)) {
+            $response_array['status'] = 400;
+            $response_array['message'] = 'Notificação inválida. Tente novamente.';
 
-            $notSetting->user_id = $id;
-            $notSetting->name = $name;
+            return response()->json($response_array);
         }
 
-        $notSetting->value = $value;
+        if(!canReadNotification($id)) {
+            $response_array['status'] = 400;
+            $response_array['message'] = 'Você não tem permissão para editar esta notificação.';
 
-        $notSetting->save();
+            return response()->json($response_array);
+        }
+
+        $notification->read = 1;
+        $notification->save();
+
+        $response_array['status'] = 200;
+        $response_array['message'] = 'Você marcou a notificação como lida.';
+
+        return response()->json($response_array);
     }
 }

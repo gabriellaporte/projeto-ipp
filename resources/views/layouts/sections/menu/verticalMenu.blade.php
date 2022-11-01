@@ -49,9 +49,13 @@
             </ul>
         </li>
 
-        <li class="menu-item {{ request()->routeIs('account.notifications.settings') ? 'active' : '' }}">
-            <a href="javascript:void(0);" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-bell"></i>
+        <li class="menu-item {{ request()->routeIs('account.notifications') ? 'active' : '' }}">
+            <a href="{{ route('account.notifications') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-bell position-relative">
+                    @if(count(auth()->user()->notifications->where('read', 0)))
+                        <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger" style="position: absolute; top: 0; left: 0; width: 5px; height: 5px; font-size: 10px;">{{ count(auth()->user()->notifications->where('read', 0)) }}</span>
+                    @endif
+                </i>
                 <div>Notificações</div>
             </a>
         </li>
