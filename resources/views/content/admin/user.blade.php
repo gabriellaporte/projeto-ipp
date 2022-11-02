@@ -67,11 +67,13 @@
                                         <div class="dropdown-menu"
                                              style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate(-145px, 27px);"
                                              data-popper-placement="bottom-end">
-                                            @can('users.edit')
+                                            @can('addresses.view')
                                                 <a class="dropdown-item show-addresses" href="javascript:void(0);" data-user-id="{{ $user->id }}" data-user-name="{{ $user->getShortName() }}">
                                                     <i class="bx bx-id-card me-1"></i>
                                                     Endereços
                                                 </a>
+                                            @endcan
+                                            @can('users.edit')
                                                 <a class="dropdown-item" href="{{ route('admin.user.show', $user->id) }}">
                                                     <i class="bx bx-edit-alt me-1"></i>
                                                     Editar

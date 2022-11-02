@@ -17,6 +17,11 @@
     /* Content classes */
     $container = ($container ?? 'container-xxl');
 
+	/* Cidades existentes*/
+	$cities = \App\Http\Controllers\AddressController::getExistingCities();
+
+	/* Bairros existentes */
+	$areas = \App\Http\Controllers\AddressController::getExistingAreas();
 @endphp
 
 @section('layoutContent')
@@ -124,14 +129,31 @@
                                         <button type="submit" class="btn btn-primary">Pesquisar Membro</button>
                                     </div>
                                 </form>
-                                <form class="tab-pane fade" id="addressSearch" method="GET">
+                                <form class="tab-pane fade" id="addressSearch" method="GET" action="{{ route('search.addresses') }}">
                                     @csrf
                                     <div class="modal-body py-3">
                                         <div class="row">
                                             <div class="mb-3 col-12">
-                                                <label for="title" class="form-label">Endereço blablabla</label><span class="fw-bold text-danger ms-1">*</span>
-                                                <input class="form-control" type="text" id="title" name="title" value="{{ old('title') }}" placeholder="..." autofocus/>
+                                                <label for="search_city" class="form-label">Cidade</label>
+                                                <select name="search_city" id="search_city" class="form-control select2">
+                                                    <option disabled selected value="">Selecione uma cidade</option>
+                                                    <option value="">Todas as cidades</option>
+                                                    @foreach($cities as $cities)
+                                                        <option value="{{ $cities }}">{{ $cities }}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
+                                            <div class="mb-3 col-12">
+                                                <label for="search_area" class="form-label">Bairro</label>
+                                                <select name="search_area" id="search_area" class="form-control select2">
+                                                    <option disabled selected value="">Selecione um bairro</option>
+                                                    <option value="">Todos os bairros</option>
+                                                    @foreach($areas as $area)
+                                                        <option value="{{ $area }}">{{ $area }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <!--<p class="text-center">Deseja ver o mapa completo? <a href="#" class="cursor-pointer">Clique aqui!</a></p>-->
                                         </div>
                                     </div>
                                     <div class="modal-footer">

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SearchAddressRequest;
 use App\Http\Requests\SearchUsersRequest;
+use App\Models\Address;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -13,6 +15,12 @@ class SearchController extends Controller
         $this->middleware('auth');
     }
 
+    /**
+     * Executa as buscas por um usuário com os critérios e retorna a view com os resultados
+     *
+     * @param SearchUsersRequest $request   |   Critérios de busca
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function searchUsers(SearchUsersRequest $request) {
         $users = User::orderBy('name', 'asc');
 
@@ -35,6 +43,31 @@ class SearchController extends Controller
         $users = $users->paginate(10);
 
         return view('content.search.member_search')
+            ->with('users', $users);
+    }
+
+
+    public function searchAddresses(SearchAddressRequest $request) {
+        $addresses = Address::orderBy('id', 'asc');
+
+        if(!is_null($request->search_city)) {
+            $addresses->where('city', $request->search_city);
+        }
+
+        if(!is_null($request->search_area)) {
+            $addresses->where('area', $request->search_area);
+        }
+
+        $addresses = $addresses->select('user_id')->distinct()->get();
+        $users = [];
+
+        foreach($addresses as $address) {
+            $users[] = $address->user->id;
+        }
+
+        $users = User::whereIn('id', $users)->orderBy('name', 'asc')->paginate(10);
+
+        return view('content.search.address_search')
             ->with('users', $users);
     }
 }

@@ -2,3 +2,7 @@
 @import 'bootstrap-extended';
 @import 'components';
 @import 'colors';
+
+.select2-container {
+    z-index: 999999 !important;
+}

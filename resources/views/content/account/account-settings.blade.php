@@ -349,14 +349,6 @@
     <script src="{{asset('assets/js/pages-account-settings-account.js')}}"></script>
 
     <script>
-        $(document).ready(() => {
-            if ($(".select2").length > 0) {
-                $(".select2").select2();
-            }
-        });
-    </script>
-
-    <script>
         $(document).ready(($) => {
             $(document).on('keyup', '#formAddresses .cep-mask', e => {
                 let el = $(e.target);

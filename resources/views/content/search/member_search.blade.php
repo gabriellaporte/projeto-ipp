@@ -55,7 +55,7 @@
                     </table>
                 </div>
                 <div class="d-flex w-100 justify-content-center mt-4">
-                    {!! $users->links() !!}
+                    {!! $users->withQueryString()->links() !!}
                 </div>
 
             </div>

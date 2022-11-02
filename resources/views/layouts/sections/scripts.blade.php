@@ -77,3 +77,40 @@
   })
 </script>
 <!-- END: Dropdown Responsive Table -->
+
+<!-- BEGIN: Select2 Initialize -->
+<script>
+    $(document).ready(() => {
+        if ($(".select2").length > 0) {
+            $(".select2").select2();
+        }
+    });
+</script>
+<!-- END: Select2 Initialize -->
+
+<!-- BEGIN: Pesquisa de Endereços -->
+<script>
+    $("#search_city").change( function(e) {
+        let city = $(this).val();
+
+        $('#search_area').attr('disabled', true);
+
+        $.get('/addresses/bairros/' + city).done(data => {
+
+            $('#search_area').empty();
+            $('#search_area').val('');
+            $('#search_area').html(`
+               <option disabled selected value="">Selecione um bairro</option>
+               <option value="">Todos os bairros</option>`);
+
+            data.forEach(area => {
+                $('#search_area').append(`<option value="${area}">${area}</option>`);
+            })
+
+            $('#search_area').removeAttr('disabled');
+        }).fail(() => {
+            return toastr.error('Oops! Houve um erro ao tentar carregar os bairros de' + city + '.');
+        });
+    });
+</script>
+<!-- END: Pesquisa de Endereços -->

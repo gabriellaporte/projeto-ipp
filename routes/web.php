@@ -40,6 +40,7 @@ Route::get('/recuperar-senha', [AuthController::class, 'showRecoverPasswordPage'
 // Pesquisa
 Route::group(['middleware' => 'auth', 'prefix' => 'pesquisa', 'as' => 'search.'], function () {
     Route::get('/membros', [SearchController::class, 'searchUsers'])->name('members');
+    Route::get('/enderecos', [SearchController::class, 'searchAddresses'])->name('addresses');
 });
 
 // Minha Conta
@@ -75,6 +76,7 @@ Route::post('/usuario/edit/{id?}', [UserController::class, 'edit'])->name('user.
 Route::post('/addresses/sync/{id?}', [AddressController::class, 'syncAddresses'])->name('addresses.sync');
 Route::get('/addresses/flush/{id?}', [AddressController::class, 'deleteAddresses'])->name('addresses.flush');
 Route::get('/addresses/{id}/destroy', [AddressController::class, 'destroy'])->name('addresses.delete');
+Route::get('/addresses/bairros/{city?}', [AddressController::class, 'getExistingAreas'])->name('addresses.areas.get');
 
 // Notificações
 Route::post('/notificacoes/sync/', [NotificationSettingsController::class, 'syncNotifications'])->name('notifications.sync');
