@@ -240,8 +240,9 @@
 
                     $("#addressModal .modal-body").append(html);
                     console.log(currentAddress);
-                    $.get('https://nominatim.openstreetmap.org/search?format=json&q=' + currentAddress.address + ', ' + currentAddress.house_number, function(data){
+                    $.get('https://nominatim.openstreetmap.org/search?format=json&q=' + currentAddress.address + ', ' + currentAddress.house_number + ', ' + currentAddress.area + ', ' + currentAddress.city + ', ' + currentAddress.state, function(data){
                         userMaps.push(L.map('map-' + currentAddress.id).setView([data[0].lat, data[0].lon], 16));
+                        let addressInfo = currentAddress.address_complement == null ? currentAddress.address + ', ' + currentAddress.house_number + ', ' + currentAddress.area + ', ' + currentAddress.city : currentAddress.address + ', ' + currentAddress.house_number + ', ' + currentAddress.address_complement + ', ' + currentAddress.area + ', ' + currentAddress.city;
 
                         L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=xinj6wTWg04tHLy3VyQd',{
                             tileSize: 512,
@@ -250,16 +251,8 @@
                             crossOrigin: true
                         }).addTo(userMaps[index]);
 
-                        L.marker([data[0].lat, data[0].lon]).addTo(userMaps[index]).bindPopup(
-                            currentAddress.address_complement == null ?
-                                currentAddress.address + ', ' + currentAddress.house_number + ', ' + currentAddress.area + ', ' + currentAddress.city
-                            :
-                                currentAddress.address + ', ' + currentAddress.house_number + ', ' + currentAddress.address_complement + ', ' + currentAddress.area + ', ' + currentAddress.city);
-                        L.circle([data[0].lat, data[0].lon], {
-                            color: '#696cff',
-                            fillColor: '#696cff',
-                            fillOpacity: 0.16,
-                            radius: 240
+                        L.marker([data[0].lat, data[0].lon]).addTo(userMaps[index]).bindPopup(addressInfo);
+                        L.circle([data[0].lat, data[0].lon], {color: '#696cff', fillColor: '#696cff',fillOpacity: 0.16, radius: 240
                         }).addTo(userMaps[index]).bindPopup("A precisão do mapa pode ter<br>sido afetada neste raio.");
                     });
                 });

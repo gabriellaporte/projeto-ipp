@@ -46,7 +46,12 @@ class SearchController extends Controller
             ->with('users', $users);
     }
 
-
+    /**
+     * Executa as buscas por usuários que se enquadrem nos critérios de endereço, depois retorna a view com endereço
+     *
+     * @param SearchAddressRequest $request |   Critérios de busca
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
+     */
     public function searchAddresses(SearchAddressRequest $request) {
         $addresses = Address::orderBy('id', 'asc');
 
@@ -69,5 +74,15 @@ class SearchController extends Controller
 
         return view('content.search.address_search')
             ->with('users', $users);
+    }
+
+    /**
+     * Mostra o mapa completo de endereços
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function addressesMap() {
+
+        return view('content.search.address_full_view');
     }
 }

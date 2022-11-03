@@ -8,6 +8,7 @@ use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class APIController extends Controller
 {
@@ -16,9 +17,26 @@ class APIController extends Controller
         // $this->middleware('auth:api');
     }
 
-    public function getUserAddresses($userID)
+    /**
+     * Exibe uma lista de endereços. Se o ID do usuário for null, agrupa todos usuários de um mesmo endereço e lista todos endereços existentes.
+     *
+     * @param $userID   |   ID do usuário
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getUserAddresses($userID = null)
     {
-        $addresses = Address::where('user_id', $userID)->orderBy('id', 'asc')->get();
+        // Caso tenha o usuário especificado, retornar apenas os endereços vinculados
+        if(!is_null($userID)) {
+            $addresses = Address::where('user_id', $userID)->orderBy('id', 'asc')->get();
+
+            return response()->json($addresses);
+        }
+
+        // Se não tiver usuário, retornar todos
+        $addresses = Address::select(DB::raw("address, house_number, address_complement, area, cep, city, state, GROUP_CONCAT(DISTINCT a.user_id) as `users`, GROUP_CONCAT(DISTINCT u.name ORDER BY u.id ASC) as `users_names`"))
+            ->join('users as u', 'a.user_id', 'u.id')
+            ->groupBy('address', 'house_number', 'address_complement', 'area', 'cep', 'city', 'state')
+            ->get();
 
         return response()->json($addresses);
     }

@@ -16,5 +16,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/addresses/{userID}', [APIController::class, 'getUserAddresses'])->name('api.user.addresses');
+Route::get('/addresses/{userID?}', [APIController::class, 'getUserAddresses'])->name('api.addresses');
 Route::get('/notification/{id}', [APIController::class, 'getNotification'])->name('api.notification');

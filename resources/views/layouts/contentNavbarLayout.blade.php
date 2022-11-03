@@ -90,7 +90,7 @@
                                         <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#userSearch">Membros</button>
                                     </li>
                                     <li class="nav-item">
-                                        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#addressSearch">Endereço</button>
+                                        <button type="button" @cannot('addresses.read') disabled title="Somente oficias podem acessar aqui!" style="cursor: not-allowed;" @endcan class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#addressSearch">Endereço</button>
                                     </li>
                                 </ul>
                             </div>

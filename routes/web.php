@@ -40,7 +40,8 @@ Route::get('/recuperar-senha', [AuthController::class, 'showRecoverPasswordPage'
 // Pesquisa
 Route::group(['middleware' => 'auth', 'prefix' => 'pesquisa', 'as' => 'search.'], function () {
     Route::get('/membros', [SearchController::class, 'searchUsers'])->name('members');
-    Route::get('/enderecos', [SearchController::class, 'searchAddresses'])->name('addresses');
+    Route::get('/enderecos', [SearchController::class, 'searchAddresses'])->middleware('officer')->name('addresses');
+    Route::get('/mapa', [SearchController::class, 'addressesMap'])->middleware('officer')->name('addresses.map');
 });
 
 // Minha Conta

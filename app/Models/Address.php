@@ -9,7 +9,7 @@ class Address extends Model
 {
     use HasFactory;
 
-    protected $table = 'addresses';
+    protected $table = 'addresses as a';
 
     public function user() {
         return $this->belongsTo(User::class, 'user_id');

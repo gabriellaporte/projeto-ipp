@@ -1,6 +1,6 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', 'Pesquisa de Membros - Minha Conta')
+@section('title', 'Pesquisa de Membros')
 
 
 @section('content')
