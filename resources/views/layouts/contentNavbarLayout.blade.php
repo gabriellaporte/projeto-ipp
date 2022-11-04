@@ -22,6 +22,9 @@
 
 	/* Bairros existentes */
 	$areas = \App\Http\Controllers\AddressController::getExistingAreas();
+
+	/* Famílias existentes */
+	$families = \App\Models\Family::orderBy('name', 'asc')->get();
 @endphp
 
 @section('layoutContent')
@@ -102,6 +105,15 @@
                                             <div class="mb-4 col-12">
                                                 <label for="search_name" class="form-label">Nome ou parte do nome</label>
                                                 <input class="form-control" type="text" id="search_name" name="search_name" value="{{ request()->get('search_name') }}" placeholder="..."/>
+                                            </div>
+                                            <div class="mb-3 col-12">
+                                                <label for="search_family" class="form-label">Família</label>
+                                                <select name="search_family" id="search_family" class="form-control select2">
+                                                    <option selected value="">Todas</option>
+                                                    @foreach($families as $family)
+                                                        <option value="{{ $family->id }}" {{ request()->get('search_family') == $family->id ? 'selected' : '' }}>{{ $family->name }}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                             <div class="row mb-4 pe-sm-0">
                                                 <strong class="text-center mb-1">NASCIMENTO</strong>

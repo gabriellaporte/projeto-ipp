@@ -40,6 +40,10 @@ class SearchController extends Controller
             $users->where('gender', $request->search_gender);
         }
 
+        if(!is_null($request->search_family)) {
+            $users->where('family_id', $request->search_family);
+        }
+
         $users = $users->paginate(10);
 
         return view('content.search.member_search')
