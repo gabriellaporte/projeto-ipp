@@ -25,7 +25,7 @@
                                     class="fw-bold">{{ \Carbon\Carbon::parse(auth()->user()->previous_last_login)->translatedFormat('d/M/Y à\s H:m') }}</span>
                             </p>
 
-                            <a href="javascript:;" class="btn btn-sm btn-outline-primary">Ver Notificações</a>
+                            <a href="{{ route('account.notifications') }}" class="btn btn-sm btn-outline-primary">Ver Notificações</a>
                         </div>
                     </div>
                     <div class="col-sm-5 text-center text-sm-left">

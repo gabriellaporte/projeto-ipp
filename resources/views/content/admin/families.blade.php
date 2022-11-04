@@ -12,7 +12,7 @@
 
             <div class="card mb-4">
                 <div class="card-header d-flex flex-column flex-sm-row align-items-center justify-content-between">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addFamilyModal" >Adicionar Família</button>
+                    <button type="button" class="btn btn-primary mb-3 mb-sm-0" data-bs-toggle="modal" data-bs-target="#addFamilyModal" >Adicionar Família</button>
                     <form id="searchForm" class="d-flex">
                         <input type="text" name="filter[name]" class="form-control border-0 shadow-none" placeholder="Pesquisar..." aria-label="Search...">
                         <button type="submit" style="border: none; background-color: transparent; color: #697a8d;">
