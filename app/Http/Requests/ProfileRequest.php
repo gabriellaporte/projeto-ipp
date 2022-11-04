@@ -38,7 +38,8 @@ class ProfileRequest extends FormRequest
             'enrollmentOrigin' => 'nullable|string',
             'enrollmentDate' => ['nullable', 'string', new DateStringRule()],
             'gender' => 'nullable|string',
-            'roles' => 'nullable|array'
+            'roles' => 'nullable|array',
+            'family' => 'nullable|integer',
         ];
     }
 
@@ -55,7 +56,8 @@ class ProfileRequest extends FormRequest
             'profilePicture.mimes' => 'A foto de perfil deve estar no formato JPG, JPEG, PNG ou GIF.',
             'profilePicture.max' => 'A foto de perfil só pode ter até 4 MB de tamanho.',
             'emailAddress.email' => 'O email informado está no formato inválido.',
-            'emailAddress.unique' => 'Já existe um mesmo email cadastrado.'
+            'emailAddress.unique' => 'Já existe um mesmo email cadastrado.',
+            'family.integer' => 'Família inválida. Tente novamente'
           ];
     }
 

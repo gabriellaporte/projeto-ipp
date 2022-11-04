@@ -30,6 +30,7 @@ class User extends Authenticatable
         'gender',
         'enrollment_date',
         'enrollment_origin',
+        'family_id',
         'previous_last_login',
         'last_login'
     ];
@@ -91,5 +92,15 @@ class User extends Authenticatable
     public function notifications()
     {
         return $this->hasMany(UserNotification::class, 'user_id');
+    }
+
+    /**
+     * Retorna a família ao qual o usuário pertence
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function family()
+    {
+        return $this->belongsTo(Family::class, 'family_id');
     }
 }

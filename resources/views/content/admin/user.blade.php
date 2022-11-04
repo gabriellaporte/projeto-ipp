@@ -193,6 +193,18 @@
                                 </select>
                             </div>
 
+                            <div class="mb-3 col-12">
+                                <label class="form-label" for="gender">Família</label>
+                                <select id="family" name="family" class="select2 form-select">
+                                    <optgroup label="Selecione uma família">
+                                        <option selected value="0">Nenhuma</option>
+                                        @foreach($families as $family)
+                                            <option
+                                                value="{{ $family->id }}">{{ $family->name }}</option>
+                                        @endforeach
+                                    </optgroup>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>

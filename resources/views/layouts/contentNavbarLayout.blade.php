@@ -153,7 +153,7 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            <!--<p class="text-center">Deseja ver o mapa completo? <a href="#" class="cursor-pointer">Clique aqui!</a></p>-->
+                                            <p class="text-center">Deseja ver o mapa completo? <a href="{{ route('search.addresses.map') }}" class="cursor-pointer">Clique aqui!</a></p>
                                         </div>
                                     </div>
                                     <div class="modal-footer">

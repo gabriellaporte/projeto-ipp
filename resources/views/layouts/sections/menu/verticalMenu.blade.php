@@ -77,6 +77,13 @@
             <span class="menu-header-text">Oficiais</span>
         </li>
 
+        <li class="menu-item {{ request()->routeIs('admin.families') ? 'active' : '' }}">
+            <a href="{{ route('admin.families') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-group"></i>
+                <div>Famílias</div>
+            </a>
+        </li>
+
         <li class="menu-item {{ request()->routeIs('admin.users') ? 'active' : '' }}">
             <a href="{{ route('admin.users') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-user"></i>

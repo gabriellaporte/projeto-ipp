@@ -163,10 +163,10 @@
                             crossOrigin: true
                         }).addTo(userMaps[index]);
 
-                        L.marker([data[0].lat, data[0].lon]).addTo(userMaps[index]).bindPopup(addressInfo);
-                        L.circle([data[0].lat, data[0].lon],
-                            {color: '#696cff', fillColor: '#696cff', fillOpacity: 0.16, radius: 240}
-                        ).addTo(userMaps[index]).bindPopup("A precisão do mapa pode ter<br>sido afetada neste raio.");
+                        L.marker([data[0].lat, data[0].lon])
+                            .addTo(userMaps[index]).bindPopup(addressInfo);
+                        L.circle([data[0].lat, data[0].lon], {color: '#696cff', fillColor: '#696cff', fillOpacity: 0.16, radius: 240})
+                            .addTo(userMaps[index]).bindPopup("A precisão do mapa pode ter<br>sido afetada neste raio.");
                     });
                 });
 

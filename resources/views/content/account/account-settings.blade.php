@@ -120,6 +120,18 @@
                                     </optgroup>
                                 </select>
                             </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="family" class="form-label">Família</label>
+                                <select id="family" name="family" class="select2 form-select" @cannot('user.edit') disabled @endcannot>
+                                    <optgroup label="Selecione a família de {{ explode(' ', $user->name)[0] }}">
+                                        <option {{ is_null($user->family_id) ? 'selected' : '' }} value="0">Nenhuma</option>
+                                        @foreach($families as $family)
+                                            <option
+                                                value="{{ $family->id }}" {{ $user->family_id == $family->id ? 'selected' : '' }}>{{ $family->name }}</option>
+                                        @endforeach
+                                    </optgroup>
+                                </select>
+                            </div>
                         </div>
                         <div class="mt-2">
                             <button type="submit" class="btn btn-primary me-2">Salvar</button>
@@ -155,7 +167,7 @@
                             @forelse($addresses as $address)
                                 <!-- Se não tiver nenhum endereço em edição, irá puxar do banco de dados -->
                                 <div class="input-wrapper row"
-                                     style="{{ ((!is_null(old('niceName')) && count(old('niceName'))) || count($addresses) > 1) && $loop->first ? 'box-shadow: rgb(9, 3, 104) 0px 24px 3px -24px; margin-bottom: 20px; padding-bottom: 10px;' : ''}}">
+                                     style="{{ ((!is_null(old('niceName')) && count(old('niceName'))) || count($addresses) > 1) && !$loop->last ? 'box-shadow: rgb(9, 3, 104) 0px 24px 3px -24px; margin-bottom: 20px; padding-bottom: 10px;' : ''}}">
                                     <div class="mb-3 col-md-6">
                                             <label for="niceName" class="form-label">Apelido <span class="fw-bold text-danger ms-1">*</span></label>
                                         <input class="form-control" type="text" id="niceName" name="niceName[]"

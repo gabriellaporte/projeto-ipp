@@ -20,7 +20,7 @@ class UserController extends Controller
      * Edita o perfil de um usuário ($id) vindo pela pela requisição ($request)
      *
      * @param ProfileRequest $request | Requisição via POST
-     * @param $id | O ID do usuário a ser editado
+     * @param $id | O ID do usuário a ser editado, se for null, considera-se que o usuário está editando a si mesmo (sessão auth)
      * @return \Illuminate\Http\RedirectResponse
      */
     public function edit(ProfileRequest $request, $id = null)
@@ -51,6 +51,14 @@ class UserController extends Controller
             $storeFile = $request->profilePicture->store('img/avatars');
 
             $user->profile_picture = $storeFile;
+        }
+
+        if(!is_null($request->family)) {
+            if($request->family == 0) { // Remover
+                $user->family_id = null;
+            } else {
+                $user->family_id = $request->family;
+            }
         }
 
         $user->save();

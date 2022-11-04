@@ -4,6 +4,7 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminNotificationController;
+use App\Http\Controllers\Admin\FamilyController;
 use App\Http\Controllers\Admin\MemberController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomeController;
@@ -68,6 +69,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::post('/notificacoes/store', [AdminNotificationController::class, 'storeNotification'])->name('notifications.store');
     Route::post('/notificacoes/edit', [AdminNotificationController::class, 'editNotification'])->name('notifications.edit');
     Route::get('/notificacoes/delete/{id}', [AdminNotificationController::class, 'deleteNotification'])->name('notifications.delete');
+
+    Route::get('/familias', [FamilyController::class, 'showFamilies'])->name('families');
+    Route::post('/familias/store', [FamilyController::class, 'storeFamily'])->name('families.store');
+    Route::post('/familias/edit', [FamilyController::class, 'editFamily'])->name('families.edit');
+    Route::get('/familias/delete/{id}', [FamilyController::class, 'deleteFamily'])->name('families.delete');
 });
 
 // Usuário

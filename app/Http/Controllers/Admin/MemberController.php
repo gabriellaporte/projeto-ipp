@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\ProfileRequest;
 use App\Models\Address;
+use App\Models\Family;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -31,9 +32,11 @@ class MemberController extends AdminController
             ->allowedSorts('name')
             ->orderBy('name', 'asc')
             ->paginate(10);
+        $families = Family::orderBy('name', 'asc')->get();
 
         return view('content.admin.user')
-            ->with('users', $users);
+            ->with('users', $users)
+            ->with('families', $families);
     }
 
     /**
@@ -47,6 +50,7 @@ class MemberController extends AdminController
         $user = User::find($id);
         $roles = Role::orderBy('id', 'desc')->get();
         $addresses = Address::where('user_id', $user->id)->get();
+        $families = Family::orderBy('name', 'asc')->get();
 
         if (is_null($user)) {
             return redirect()
@@ -54,9 +58,15 @@ class MemberController extends AdminController
                 ->withErrors('Não foi possível encontrar este usuário.');
         }
 
-        return view('content.account.account-settings', ['user' => $user, 'roles' => $roles, 'addresses' => $addresses]);
+        return view('content.account.account-settings', ['user' => $user, 'roles' => $roles, 'addresses' => $addresses, 'families' => $families]);
     }
 
+    /**
+     * Cria um novo usuário com base nos dados enviados
+     *
+     * @param ProfileRequest $request   |   Dados enviados e validados
+     * @return mixed
+     */
     public function store(ProfileRequest $request) {
         $user = new User;
 
@@ -70,6 +80,7 @@ class MemberController extends AdminController
             'enrollment_origin' => $request->enrollmentOrigin,
             'enrollment_date' => !is_null($request->enrollmentDate) ? Carbon::createFromFormat('d/m/Y', $request->enrollmentDate)->format('Y-m-d') : null,
             'gender' => $request->gender,
+            'family_id' => $request->family
         ]);
 
         if(!is_null($request->profilePicture))
@@ -83,6 +94,12 @@ class MemberController extends AdminController
             ->withSuccess('Você criou o usuário ' . $user->getShortName() . ' com sucesso. Você pode editá-lo agora!');
     }
 
+    /**
+     * Deleta um usuário pelo ID (soft delete)
+     *
+     * @param $id   |   ID do usuário
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function delete($id) {
         $user = User::find($id);
 

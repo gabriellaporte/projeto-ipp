@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AddressRequest;
 use App\Http\Requests\ProfileRequest;
 use App\Models\Address;
+use App\Models\Family;
 use App\Models\NotificationSetting;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -27,8 +28,9 @@ class AccountController extends Controller
         $user = auth()->user();
         $roles = Role::orderBy('id', 'desc')->get();
         $addresses = Address::where('user_id', auth()->user()->id)->get();
+        $families = Family::orderBy('name', 'asc')->get();
 
-        return view('content.account.account-settings', ['roles' => $roles, 'addresses' => $addresses, 'user' => $user]);
+        return view('content.account.account-settings', ['roles' => $roles, 'addresses' => $addresses, 'user' => $user, 'families' => $families]);
     }
 
     /**

@@ -65,8 +65,7 @@ class UserFactory extends Factory
             // Email
             $name = explode(' ', str_replace('.', '', $user->name));
             $name = strtolower(implode('.', $name));
-            $user->email = $name . '@gmail.com';
-            $user->save();
+            $user->update(['email' => $name . '@gmail.com']);
 
             // Cargo
             $user->assignRole('Membro');
