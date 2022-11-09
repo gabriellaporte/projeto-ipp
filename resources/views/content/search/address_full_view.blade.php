@@ -30,11 +30,6 @@
             crossOrigin: true
         }).addTo(map);
 
-        // Recarregar o mapa
-        setTimeout(function() {
-            map.invalidateSize();
-        }, 1500);
-
         $(document).ready( function () {
             $.get("/api/addresses/").done(data => {
 
@@ -53,6 +48,10 @@
                         let marker = L.marker([response[0].lat, response[0].lon]).addTo(map).bindPopup(addressInfo);
                     });
                 });
+            }).done( () => {
+                setTimeout(function() {
+                    map.invalidateSize();
+                }, 1200);
             }).fail( () => {
                 $("#mapWrapper").html("<p class='text-center mb-0'>Houve um erro com o banco de dados. Tente novamente.</p>");
             })

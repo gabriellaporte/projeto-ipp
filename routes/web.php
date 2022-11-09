@@ -27,8 +27,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-$controller_path = 'App\Http\Controllers';
-
 // Página inicial
 Route::get('/', [HomeController::class, 'index'])->name('index');
 
@@ -36,7 +34,7 @@ Route::get('/', [HomeController::class, 'index'])->name('index');
 Route::group(['middleware' => 'auth', 'prefix' => 'pesquisa', 'as' => 'search.'], function () {
     Route::get('/membros', [SearchController::class, 'searchUsers'])->name('members');
     Route::get('/enderecos', [SearchController::class, 'searchAddresses'])->middleware('officer')->name('addresses');
-    Route::get('/mapa', [SearchController::class, 'addressesMap'])->middleware('officer')->name('addresses.map');
+    Route::view('/enderecos/mapa', 'content.search.address_full_view')->middleware('officer')->name('addresses.map');
 });
 
 // Minha Conta
@@ -49,7 +47,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'minha-conta', 'as' => 'accoun
 });
 
 // Membros
-
 Route::get('/aniversarios', [UserController::class, 'showBirthdays'])->name('birthdays');
 
 // Admin

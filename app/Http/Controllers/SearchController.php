@@ -6,22 +6,18 @@ use App\Http\Requests\SearchAddressRequest;
 use App\Http\Requests\SearchUsersRequest;
 use App\Models\Address;
 use App\Models\User;
-use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class SearchController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     /**
      * Executa as buscas por um usuário com os critérios e retorna a view com os resultados
      *
      * @param SearchUsersRequest $request   |   Critérios de busca
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
-    public function searchUsers(SearchUsersRequest $request) {
+    public function searchUsers(SearchUsersRequest $request): View
+    {
         $users = User::orderBy('name', 'asc');
 
         if(!is_null($request->search_name)) {
@@ -44,10 +40,8 @@ class SearchController extends Controller
             $users->where('family_id', $request->search_family);
         }
 
-        $users = $users->paginate(10);
-
         return view('content.search.member_search')
-            ->with('users', $users);
+            ->with('users', $users->paginate(10));
     }
 
     /**
@@ -56,7 +50,8 @@ class SearchController extends Controller
      * @param SearchAddressRequest $request |   Critérios de busca
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
      */
-    public function searchAddresses(SearchAddressRequest $request) {
+    public function searchAddresses(SearchAddressRequest $request): View
+    {
         $addresses = Address::orderBy('id', 'asc');
 
         if(!is_null($request->search_city)) {
@@ -78,15 +73,5 @@ class SearchController extends Controller
 
         return view('content.search.address_search')
             ->with('users', $users);
-    }
-
-    /**
-     * Mostra o mapa completo de endereços
-     *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
-     */
-    public function addressesMap() {
-
-        return view('content.search.address_full_view');
     }
 }
