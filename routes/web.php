@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminNotificationController;
 use App\Http\Controllers\Admin\FamilyController;
 use App\Http\Controllers\Admin\MemberController;
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
@@ -14,7 +15,6 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
 use App\Models\Notification;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,14 +29,8 @@ use App\Http\Controllers\AuthController;
 
 $controller_path = 'App\Http\Controllers';
 
-// Index
+// Página inicial
 Route::get('/', [HomeController::class, 'index'])->name('index');
-
-// Autenticação
-Route::get('/login', [AuthController::class, 'showLoginPage'])->name('login');
-Route::post('/login', [LoginController::class, 'login'])->name('login-authentication');
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-Route::get('/recuperar-senha', [AuthController::class, 'showRecoverPasswordPage'])->name('recover-password');
 
 // Pesquisa
 Route::group(['middleware' => 'auth', 'prefix' => 'pesquisa', 'as' => 'search.'], function () {
@@ -87,3 +81,9 @@ Route::get('/addresses/bairros/{city?}', [AddressController::class, 'getExisting
 
 // Notificações
 Route::post('/notificacoes/sync/', [NotificationSettingsController::class, 'syncNotifications'])->name('notifications.sync');
+
+// Autenticação
+Route::get('/login', [AuthController::class, 'index'])->name('login');
+Route::post('/login', [LoginController::class, 'login'])->name('login-authentication');
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/recuperar-senha', [AuthController::class, 'showRecoverPasswordPage'])->name('recover-password');

@@ -33,7 +33,7 @@ class UserNotification extends Model
     }
 
     /**
-     * Retorna o usuário que enviou a notificação (0, se for o sistema)
+     * Retorna o usuário que enviou a notificação (null, se for o sistema)
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
