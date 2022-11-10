@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\BirthdayController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
@@ -56,7 +57,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'minha-conta', 'as' => 'accoun
 });
 
 // Membros
-Route::get('/aniversarios', [UserController::class, 'showBirthdays'])->name('birthdays');
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/aniversarios', [BirthdayController::class, 'index'])->name('birthdays');
+});
 
 // Admin
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
