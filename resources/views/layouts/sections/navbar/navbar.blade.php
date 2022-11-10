@@ -74,7 +74,7 @@ $navbarDetached = ($navbarDetached ?? '');
                 <div class="dropdown-divider"></div>
               </li>
               <li>
-                <a class="dropdown-item" href="{{ route('account.settings') }}">
+                <a class="dropdown-item" href="{{ route('account.settings.edit') }}">
                   <i class="bx bx-user me-2"></i>
                   <span class="align-middle">Minha Conta</span>
                 </a>

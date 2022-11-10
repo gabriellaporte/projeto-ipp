@@ -41,7 +41,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'pesquisa', 'as' => 'search.']
 
 // Minha Conta
 Route::group(['middleware' => 'auth', 'prefix' => 'minha-conta', 'as' => 'account.'], function () {
-    Route::get('/', [AccountSettingController::class, 'index'])->name('settings');
+    Route::get('/', [AccountSettingController::class, 'edit'])->name('settings.edit');
+    Route::put('/update/{user}', [AccountSettingController::class, 'update'])->name('settings.update');
 
     Route::get('/notificacoes', [NotificationController::class, 'index'])->name('notifications');
     Route::post('/notificacoes/read/{notification}', [NotificationController::class, 'read'])->name('notifications.read')
@@ -52,8 +53,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'minha-conta', 'as' => 'accoun
             return response()->json($response);
         });
 
-    Route::get('/notificacoes/configuracao', [NotificationSettingController::class, 'index'])->name('notifications.settings');
-    Route::post('/notificacoes/configuracao/edit/', [NotificationSettingController::class, 'edit'])->name('notifications.sync');
+    Route::get('/notificacoes/configuracao', [NotificationSettingController::class, 'index'])->name('notification-config.index');
+    Route::post('/notificacoes/configuracao/edit/', [NotificationSettingController::class, 'edit'])->name('notification-config.edit');
 });
 
 // Membros

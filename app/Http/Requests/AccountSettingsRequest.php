@@ -2,34 +2,37 @@
 
 namespace App\Http\Requests;
 
-use App\Models\User;
 use App\Rules\DateStringRule;
 use App\Rules\HousePhoneRule;
 use App\Rules\MobilePhoneRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class ProfileRequest extends FormRequest
+class AccountSettingsRequest extends FormRequest
 {
     public function authorize()
     {
+        if(!request()->user || request()->user->id != auth()->user()->id) {
+            return false;
+        }
+
         return true;
     }
 
     public function rules()
     {
         return [
-            'profilePicture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:4000',
-            'userName' => ['required', 'string', Rule::unique('users', 'name')->ignore($this->route('id') ?? auth()->user()->id)->whereNull('deleted_at')],
-            'emailAddress' => ['required', 'email', Rule::unique('users', 'email')->ignore($this->route('id') ?? auth()->user()->id)],
-            'mobilePhone' => ['nullable', 'string', new MobilePhoneRule()],
-            'housePhone' => ['nullable', 'string', new HousePhoneRule()],
-            'birthDate' => ['required', 'string', new DateStringRule()],
-            'enrollmentOrigin' => 'nullable|string',
-            'enrollmentDate' => ['nullable', 'string', new DateStringRule()],
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:4000',
+            'name' => ['required', 'string', Rule::unique('users', 'name')->ignore($this->route('id') ?? auth()->user()->id)->whereNull('deleted_at')],
+            'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($this->route('id') ?? auth()->user()->id)],
+            'mobile_phone' => ['nullable', 'string', new MobilePhoneRule()],
+            'house_phone' => ['nullable', 'string', new HousePhoneRule()],
+            'birth_date' => ['required', 'string', new DateStringRule()],
+            'enrollment_origin' => 'nullable|string',
+            'enrollment_date' => ['nullable', 'string', new DateStringRule()],
             'gender' => 'nullable|string',
             'roles' => 'nullable|array',
-            'family' => 'nullable|integer',
+            'family_id' => 'nullable|integer',
         ];
     }
 
@@ -47,8 +50,8 @@ class ProfileRequest extends FormRequest
             'profilePicture.max' => 'A foto de perfil só pode ter até 4 MB de tamanho.',
             'emailAddress.email' => 'O email informado está no formato inválido.',
             'emailAddress.unique' => 'Já existe um mesmo email cadastrado.',
-            'family.integer' => 'Família inválida. Tente novamente'
-          ];
+            'family_id.integer' => 'Família inválida. Tente novamente'
+        ];
     }
 
     public function attributes()

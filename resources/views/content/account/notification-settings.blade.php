@@ -11,7 +11,7 @@
     <div class="row">
         <div class="col-md-12">
             <ul class="nav nav-pills flex-column flex-md-row mb-3">
-                <li class="nav-item"><a class="nav-link" href="{{ route('account.settings') }}"><i
+                <li class="nav-item"><a class="nav-link" href="{{ route('account.settings.edit') }}"><i
                             class="bx bx-user me-1"></i> Configurações de Perfil</a></li>
                 <li class="nav-item"><a class="nav-link active" href="javascript:void(0);"><i
                             class="bx bx-bell me-1"></i> Configurações de Notificações</a></li>
@@ -19,7 +19,7 @@
             <div class="card mb-4">
                 <h5 class="card-header d-flex flex-column pb-4">Configurações de Notificações</h5>
                 <form class="card-body" id="notificationSettings" method="POST"
-                      action="{{ route('account.notifications.sync') }}">
+                      action="{{ route('account.notification-config.edit') }}">
                     @csrf
                     <div class="nav-align-top">
                         <ul class="nav nav-pills mb-3 flex-column flex-md-row" id="notificationSettingsNav"

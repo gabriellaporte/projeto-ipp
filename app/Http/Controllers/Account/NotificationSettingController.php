@@ -18,7 +18,6 @@ class NotificationSettingController extends Controller
 
     public function edit(Request $request)
     {
-        // Merge para alimentar a array com os nomes de notificação que não vieram do request, pois são null
         $notifications = array_merge(array_fill_keys(NotificationSetting::NOTIFICATION_TYPES, null), $request->except('_token'));
 
         foreach($notifications as $name => $value) {
