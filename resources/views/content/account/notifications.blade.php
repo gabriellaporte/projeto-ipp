@@ -48,21 +48,24 @@
 @section('page-script')
     <script>
         $(".mark-read").click( function() {
-            let id = $(this).data('notification-id');
+            let id = $(this).data("notification-id");
 
-            $.get('/minha-conta/notificacoes/read/' + id).done(data => {
+
+            $.post('/minha-conta/notificacoes/read/' + id, {
+                _token: "{{ csrf_token() }}"
+            }).done(data => {
                 if(data.status == 400) {
                     return toastr.error(data.message);
                 }
 
                 if(data.status == 200) {
 
-                    $(this).parent().siblings('.flex-grow-1').css('opacity', '.75');
+                    $(this).parent().siblings('.flex-grow-1').css("opacity", ".75");
                     $(this).parent().remove();
                     return toastr.success(data.message);
                 }
             }).fail(() => {
-                return toastr.error('Oops! Houve um erro!');
+                return toastr.error("Oops! Houve um erro!");
             });
         });
     </script>

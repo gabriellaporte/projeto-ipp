@@ -9,8 +9,15 @@ class NotificationSetting extends Model
 {
     use HasFactory;
 
-    const NOTIFICATION_TYPES = ['system_tithes_notification', 'system_offers_notification', 'system_birthdate_notification',
-        'email_tithes_notification', 'email_offers_notification', 'email_birthday_notification', 'email_system_notification'];
+    const NOTIFICATION_TYPES = [
+        'system_tithes_notification',
+        'system_offers_notification',
+        'system_birthdate_notification',
+        'email_tithes_notification',
+        'email_offers_notification',
+        'email_birthday_notification',
+        'email_system_notification'
+    ];
 
     protected $table = 'notification_settings';
 

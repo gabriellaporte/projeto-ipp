@@ -1,16 +1,17 @@
 <?php
 
-use App\Http\Controllers\AccountController;
-use App\Http\Controllers\AddressController;
+use App\Http\Controllers\Account\AccountSettingController;
+use App\Http\Controllers\Account\NotificationSettingController;
+use App\Http\Controllers\Account\NotificationController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminNotificationController;
 use App\Http\Controllers\Admin\FamilyController;
 use App\Http\Controllers\Admin\MemberController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\AccountController;
+use App\Http\Controllers\AddressController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\NotificationSettingsController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
 use App\Models\Notification;
@@ -39,11 +40,19 @@ Route::group(['middleware' => 'auth', 'prefix' => 'pesquisa', 'as' => 'search.']
 
 // Minha Conta
 Route::group(['middleware' => 'auth', 'prefix' => 'minha-conta', 'as' => 'account.'], function () {
-    Route::get('/', [AccountController::class, 'showAccountSettings'])->name('settings');
-    Route::get('/notificacoes/config', [AccountController::class, 'showNotificationSettings'])->name('notifications.settings');
+    Route::get('/', [AccountSettingController::class, 'index'])->name('settings');
 
     Route::get('/notificacoes', [NotificationController::class, 'index'])->name('notifications');
-    Route::get('/notificacoes/read/{ìd}', [NotificationController::class, 'readNotification'])->name('notifications.read');
+    Route::post('/notificacoes/read/{notification}', [NotificationController::class, 'read'])->name('notifications.read')
+        ->missing(function($request) {
+            $response['status'] = 400;
+            $response['message'] = 'Notificação inválida. Tente novamente.';
+
+            return response()->json($response);
+        });
+
+    Route::get('/notificacoes/configuracao', [NotificationSettingController::class, 'index'])->name('notifications.settings');
+    Route::post('/notificacoes/configuracao/edit/', [NotificationSettingController::class, 'edit'])->name('notifications.sync');
 });
 
 // Membros
@@ -77,7 +86,6 @@ Route::get('/addresses/{id}/destroy', [AddressController::class, 'destroy'])->na
 Route::get('/addresses/bairros/{city?}', [AddressController::class, 'getExistingAreas'])->name('addresses.areas.get');
 
 // Notificações
-Route::post('/notificacoes/sync/', [NotificationSettingsController::class, 'syncNotifications'])->name('notifications.sync');
 
 // Autenticação
 Route::get('/login', [AuthController::class, 'index'])->name('login');

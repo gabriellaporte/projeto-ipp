@@ -19,7 +19,7 @@
             <div class="card mb-4">
                 <h5 class="card-header d-flex flex-column pb-4">Configurações de Notificações</h5>
                 <form class="card-body" id="notificationSettings" method="POST"
-                      action="{{ route('notifications.sync') }}">
+                      action="{{ route('account.notifications.sync') }}">
                     @csrf
                     <div class="nav-align-top">
                         <ul class="nav nav-pills mb-3 flex-column flex-md-row" id="notificationSettingsNav"
@@ -91,7 +91,7 @@
                                     <div class="col-sm-6 p-4 d-flex flex-column align-items-center">
                                         <div class="text-light fw-semibold mb-3">Mensagens do Sistema</div>
                                         <label class="switch switch-lg">
-                                            <input type="checkbox" class="switch-input" disabled/>
+                                            <input type="checkbox" class="switch-input" checked disabled/>
                                             <span class="switch-toggle-slider">
                         <span class="switch-on">
                           <i class="bx bx-check"></i>
