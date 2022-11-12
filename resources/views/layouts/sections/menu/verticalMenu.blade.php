@@ -28,7 +28,7 @@
             <span class="menu-header-text">Minhas Informações</span>
         </li>
 
-        <li class="menu-item {{ request()->routeIs('account.settings.edit') || request()->routeIs('account.notification-config.index') ? 'active open' : '' }}">
+        <li class="menu-item {{ request()->routeIs('account.settings.edit') || request()->routeIs('account.notifications.config.index') ? 'active open' : '' }}">
             <a class="menu-link menu-toggle cursor-pointer">
                 <i class="menu-icon tf-icons bx bx-user-circle"></i>
                 <div>Minha Conta</div>
@@ -41,16 +41,16 @@
                     </a>
                 </li>
 
-                <li class="menu-item {{ request()->routeIs('account.notification-config.index') ? 'active' : '' }}">
-                    <a href="{{ route('account.notification-config.index') }}" class="menu-link">
+                <li class="menu-item {{ request()->routeIs('account.notifications.config.index') ? 'active' : '' }}">
+                    <a href="{{ route('account.notifications.config.index') }}" class="menu-link">
                         <div>Config. de Notificações</div>
                     </a>
                 </li>
             </ul>
         </li>
 
-        <li class="menu-item {{ request()->routeIs('account.notifications') ? 'active' : '' }}">
-            <a href="{{ route('account.notifications') }}" class="menu-link">
+        <li class="menu-item {{ request()->routeIs('account.notifications.index') ? 'active' : '' }}">
+            <a href="{{ route('account.notifications.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-bell position-relative">
                     @if(count(auth()->user()->notifications->where('read', 0)))
                         <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger" style="position: absolute; top: 0; left: 0; width: 5px; height: 5px; font-size: 10px;">{{ count(auth()->user()->notifications->where('read', 0)) }}</span>

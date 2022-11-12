@@ -15,7 +15,7 @@
                     <a class="nav-link active" href="javascript:void(0);"><i class="bx bx-user me-1"></i> Configurações de Perfil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('account.notification-config.index') }}"><i class="bx bx-bell me-1"></i> Configurações de Notificações</a>
+                    <a class="nav-link" href="{{ route('account.notifications.config.index') }}"><i class="bx bx-bell me-1"></i> Configurações de Notificações</a>
                 </li>
             </ul>
             <div class="card mb-4">

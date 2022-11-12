@@ -44,17 +44,20 @@ Route::group(['middleware' => 'auth', 'prefix' => 'minha-conta', 'as' => 'accoun
     Route::get('/', [AccountSettingController::class, 'edit'])->name('settings.edit');
     Route::put('/update/{user}', [AccountSettingController::class, 'update'])->name('settings.update');
 
-    Route::get('/notificacoes', [NotificationController::class, 'index'])->name('notifications');
-    Route::post('/notificacoes/read/{notification}', [NotificationController::class, 'read'])->name('notifications.read')
-        ->missing(function($request) {
-            $response['status'] = 400;
-            $response['message'] = 'Notificação inválida. Tente novamente.';
+    Route::group(['prefix' => 'notificacoes', 'as' => 'notifications.'], function () {
+        Route::get('/', [NotificationController::class, 'index'])->name('index');
+        Route::post('/read/{notification}', [NotificationController::class, 'read'])->name('read')
+            ->missing(function($request) {
+                $response['status'] = 400;
+                $response['message'] = 'Notificação inválida. Tente novamente.';
 
-            return response()->json($response);
-        });
+                return response()->json($response);
+            });
 
-    Route::get('/notificacoes/configuracao', [NotificationSettingController::class, 'index'])->name('notification-config.index');
-    Route::post('/notificacoes/configuracao/edit/', [NotificationSettingController::class, 'edit'])->name('notification-config.edit');
+        Route::get('/configuracao', [NotificationSettingController::class, 'index'])->name('config.index');
+        Route::post('/configuracao/edit/', [NotificationSettingController::class, 'edit'])->name('config.edit');
+    });
+
 });
 
 // Membros
