@@ -19,7 +19,7 @@
             <div class="card mb-4">
                 <h5 class="card-header d-flex flex-column pb-4">Configurações de Notificações</h5>
                 <form class="card-body" id="notificationSettings" method="POST"
-                      action="{{ route('account.notifications.config.edit') }}">
+                      action="{{ route('account.notifications.config.update') }}">
                     @csrf
                     <div class="nav-align-top">
                         <ul class="nav nav-pills mb-3 flex-column flex-md-row" id="notificationSettingsNav"

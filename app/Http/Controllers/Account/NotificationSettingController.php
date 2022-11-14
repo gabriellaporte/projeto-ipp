@@ -4,19 +4,20 @@ namespace App\Http\Controllers\Account;
 
 use App\Http\Controllers\Controller;
 use App\Models\NotificationSetting;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class NotificationSettingController extends Controller
 {
-    public function index(): View
+    public function edit(): View
     {
         $notificationSettings = NotificationSetting::where('user_id', auth()->user()->id)->get();
 
         return view('content.account.notification-settings', ['notSettings' => $notificationSettings]);
     }
 
-    public function edit(Request $request)
+    public function update(Request $request): RedirectResponse
     {
         $notifications = array_merge(array_fill_keys(NotificationSetting::NOTIFICATION_TYPES, null), $request->except('_token'));
 

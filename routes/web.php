@@ -3,6 +3,7 @@
 use App\Http\Controllers\Account\AccountSettingController;
 use App\Http\Controllers\Account\NotificationSettingController;
 use App\Http\Controllers\Account\NotificationController;
+use App\Http\Controllers\Account\UserAddressController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminNotificationController;
 use App\Http\Controllers\Admin\FamilyController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\BirthdayController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
+use App\Models\Address;
 use App\Models\Notification;
 use Illuminate\Support\Facades\Route;
 
@@ -44,6 +46,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'minha-conta', 'as' => 'accoun
     Route::get('/', [AccountSettingController::class, 'edit'])->name('settings.edit');
     Route::put('/update/{user}', [AccountSettingController::class, 'update'])->name('settings.update');
 
+    // Notificações
     Route::group(['prefix' => 'notificacoes', 'as' => 'notifications.'], function () {
         Route::get('/', [NotificationController::class, 'index'])->name('index');
         Route::post('/read/{notification}', [NotificationController::class, 'read'])->name('read')
@@ -54,11 +57,25 @@ Route::group(['middleware' => 'auth', 'prefix' => 'minha-conta', 'as' => 'accoun
                 return response()->json($response);
             });
 
-        Route::get('/configuracao', [NotificationSettingController::class, 'index'])->name('config.index');
-        Route::post('/configuracao/edit/', [NotificationSettingController::class, 'edit'])->name('config.edit');
+        // Configuração
+        Route::get('/configuracao', [NotificationSettingController::class, 'edit'])->name('config.edit');
+        Route::post('/configuracao/update/', [NotificationSettingController::class, 'update'])->name('config.update');
     });
 
+    // Endereços
+    Route::group(['prefix' => 'enderecos', 'as' => 'addresses.'], function () {
+        Route::post('/sync/', [UserAddressController::class, 'sync'])->name('sync');
+        Route::delete('/flush/', [UserAddressController::class, 'flush'])->name('flush');
+        Route::get('/destroy/{address}', [UserAddressController::class, 'destroy'])->name('destroy');
+    });
 });
+
+// Endereços
+Route::post('/addresses/sync/{id?}', [AddressController::class, 'syncAddresses'])->name('addresses.sync');
+Route::get('/addresses/flush/{id?}', [AddressController::class, 'deleteAddresses'])->name('addresses.flush');
+Route::get('/addresses/{id}/destroy', [AddressController::class, 'destroy'])->name('addresses.delete');
+Route::get('/addresses/bairros/{city?}', [AddressController::class, 'getExistingAreas'])->name('addresses.areas.get');
+
 
 // Membros
 Route::group(['middleware' => 'auth'], function () {
@@ -85,14 +102,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
 
 // Usuário
 Route::post('/usuario/edit/{id?}', [UserController::class, 'edit'])->name('user.edit');
-
-// Endereços
-Route::post('/addresses/sync/{id?}', [AddressController::class, 'syncAddresses'])->name('addresses.sync');
-Route::get('/addresses/flush/{id?}', [AddressController::class, 'deleteAddresses'])->name('addresses.flush');
-Route::get('/addresses/{id}/destroy', [AddressController::class, 'destroy'])->name('addresses.delete');
-Route::get('/addresses/bairros/{city?}', [AddressController::class, 'getExistingAreas'])->name('addresses.areas.get');
-
-// Notificações
 
 // Autenticação
 Route::get('/login', [AuthController::class, 'index'])->name('login');

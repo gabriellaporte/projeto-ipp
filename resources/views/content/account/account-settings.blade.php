@@ -15,7 +15,7 @@
                     <a class="nav-link active" href="javascript:void(0);"><i class="bx bx-user me-1"></i> Configurações de Perfil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('account.notifications.config.index') }}"><i class="bx bx-bell me-1"></i> Configurações de Notificações</a>
+                    <a class="nav-link" href="{{ route('account.notifications.config.edit') }}"><i class="bx bx-bell me-1"></i> Configurações de Notificações</a>
                 </li>
             </ul>
             <div class="card mb-4">
@@ -156,17 +156,17 @@
                                     aria-label="Close"></button>
                         </div>
                     </div>
-                    <form id="formAddresses" method="POST" action="{{ route('addresses.sync') }}">
+                    <form id="formAddresses" method="POST" action="{{ route('account.addresses.sync') }}">
                         @csrf
 
-                        @if(is_null(old('niceName')))
+                        @if(is_null(old('nice_name')))
+                            <!-- Se não tiver nenhum endereço em edição, irá puxar do banco de dados -->
                             @forelse($addresses as $address)
-                                <!-- Se não tiver nenhum endereço em edição, irá puxar do banco de dados -->
                                 <div class="input-wrapper row"
                                      style="{{ ((!is_null(old('niceName')) && count(old('niceName'))) || count($addresses) > 1) && !$loop->last ? 'box-shadow: rgb(9, 3, 104) 0px 24px 3px -24px; margin-bottom: 20px; padding-bottom: 10px;' : ''}}">
                                     <div class="mb-3 col-md-6">
                                             <label for="niceName" class="form-label">Apelido <span class="fw-bold text-danger ms-1">*</span></label>
-                                        <input class="form-control" type="text" id="niceName" name="niceName[]"
+                                        <input class="form-control" type="text" id="niceName" name="nice_name[]"
                                                value="{{ $address->nice_name ?? ""}}" placeholder="Ex: Casa"/>
                                     </div>
                                     <div class="mb-3 col-md-6">
@@ -190,12 +190,12 @@
                                     <div class="mb-3 col-md-6">
                                         <label for="houseNumber" class="form-label">Número <span
                                                 class="fw-bold text-danger ms-1">*</span></label>
-                                        <input class="form-control" type="text" name="houseNumber[]" id="houseNumber"
+                                        <input class="form-control" type="text" name="house_number[]" id="houseNumber"
                                                value="{{ $address->house_number ?? "" }}" placeholder="..."/>
                                     </div>
                                     <div class="mb-3 col-md-6">
                                         <label for="addressComplement" class="form-label">Complemento</label>
-                                        <input class="form-control" type="text" name="addressComplement[]"
+                                        <input class="form-control" type="text" name="address_complement[]"
                                                id="addressComplement" value="{{ $address->address_complement ?? "" }}"
                                                placeholder="..."/>
                                     </div>
@@ -212,7 +212,7 @@
                                                value="{{ $address->state ?? "" }}" placeholder="..."/>
                                     </div>
                                     <div class="mb-3 col-12 d-flex justify-content-end">
-                                        <a class="destroy-address" href="{{ route('addresses.delete', $address->id) }}">
+                                        <a class="destroy-address" href="{{ route('account.addresses.destroy', $address->id) }}">
                                             <button type="button"
                                                     class="btn rounded-pill btn-icon btn-danger remove-btn"><span
                                                     class="tf-icons bx bx-trash"></span></button>
@@ -226,7 +226,7 @@
                                     <div class="mb-3 col-md-6">
                                         <label for="niceName" class="form-label">Apelido <span
                                                 class="fw-bold text-danger ms-1">*</span></label>
-                                        <input class="form-control" type="text" id="niceName" name="niceName[]"
+                                        <input class="form-control" type="text" id="niceName" name="nice_name[]"
                                                placeholder="Ex: Casa"/>
                                     </div>
                                     <div class="mb-3 col-md-6">
@@ -250,12 +250,12 @@
                                     <div class="mb-3 col-md-6">
                                         <label for="houseNumber" class="form-label">Número <span
                                                 class="fw-bold text-danger ms-1">*</span></label>
-                                        <input class="form-control" type="text" name="houseNumber[]" id="houseNumber"
+                                        <input class="form-control" type="text" name="house_number[]" id="houseNumber"
                                                placeholder="..."/>
                                     </div>
                                     <div class="mb-3 col-md-6">
                                         <label for="addressComplement" class="form-label">Complemento</label>
-                                        <input class="form-control" type="text" name="addressComplement[]"
+                                        <input class="form-control" type="text" name="address_complement[]"
                                                id="addressComplement" placeholder="..."/>
                                     </div>
                                     <div class="mb-3 col-md-6">
@@ -286,8 +286,8 @@
                                     <div class="mb-3 col-md-6">
                                         <label for="niceName" class="form-label">Apelido <span
                                                 class="fw-bold text-danger ms-1">*</span></label>
-                                        <input class="form-control" type="text" id="niceName" name="niceName[]"
-                                               value="{{ old('niceName')[$i] ?? "" }}" placeholder="Ex: Casa"/>
+                                        <input class="form-control" type="text" id="niceName" name="nice_name[]"
+                                               value="{{ old('nice_name')[$i] ?? "" }}" placeholder="Ex: Casa"/>
                                     </div>
                                     <div class="mb-3 col-md-6">
                                         <label for="cep" class="form-label">CEP <span
@@ -310,13 +310,13 @@
                                     <div class="mb-3 col-md-6">
                                         <label for="houseNumber" class="form-label">Número <span
                                                 class="fw-bold text-danger ms-1">*</span></label>
-                                        <input class="form-control" type="text" name="houseNumber[]" id="houseNumber"
-                                               value="{{ old('houseNumber')[$i] ?? "" }}" placeholder="..."/>
+                                        <input class="form-control" type="text" name="house_number[]" id="houseNumber"
+                                               value="{{ old('house_number')[$i] ?? "" }}" placeholder="..."/>
                                     </div>
                                     <div class="mb-3 col-md-6">
                                         <label for="addressComplement" class="form-label">Complemento</label>
-                                        <input class="form-control" type="text" name="addressComplement[]"
-                                               id="addressComplement" value="{{ old('addressComplement')[$i] ?? "" }}"
+                                        <input class="form-control" type="text" name="address_complement[]"
+                                               id="addressComplement" value="{{ old('address_complement')[$i] ?? "" }}"
                                                placeholder="..."/>
                                     </div>
                                     <div class="mb-3 col-md-6">
@@ -342,16 +342,18 @@
                         @endif
                         <div class="mt-2">
                             <button type="submit" class="btn btn-primary me-2">Salvar</button>
-                            <a href="{{ route('addresses.flush') }}">
-                                <button type="button" class="btn btn-outline-danger">Remover Todos</button>
-                            </a>
+                            <button type="submit" form="flushAddressesForm" class="btn btn-outline-danger">Remover Todos</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-@endsection
+    <form id="flushAddressesForm" method="POST" action="{{ route('account.addresses.flush') }}">
+        @method('DELETE')
+        @csrf
+    </form>
+    @endsection
 
 @section('page-script')
     <script src="{{asset('assets/js/pages-account-settings-account.js')}}"></script>

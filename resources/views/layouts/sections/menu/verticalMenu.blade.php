@@ -28,7 +28,7 @@
             <span class="menu-header-text">Minhas Informações</span>
         </li>
 
-        <li class="menu-item {{ request()->routeIs('account.settings.edit') || request()->routeIs('account.notifications.config.index') ? 'active open' : '' }}">
+        <li class="menu-item {{ request()->routeIs('account.settings.edit') || request()->routeIs('account.notifications.config.edit') ? 'active open' : '' }}">
             <a class="menu-link menu-toggle cursor-pointer">
                 <i class="menu-icon tf-icons bx bx-user-circle"></i>
                 <div>Minha Conta</div>
@@ -41,8 +41,8 @@
                     </a>
                 </li>
 
-                <li class="menu-item {{ request()->routeIs('account.notifications.config.index') ? 'active' : '' }}">
-                    <a href="{{ route('account.notifications.config.index') }}" class="menu-link">
+                <li class="menu-item {{ request()->routeIs('account.notifications.config.edit') ? 'active' : '' }}">
+                    <a href="{{ route('account.notifications.config.edit') }}" class="menu-link">
                         <div>Config. de Notificações</div>
                     </a>
                 </li>
