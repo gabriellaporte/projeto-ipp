@@ -105,9 +105,9 @@
 
         let userMaps = [];
 
-        $(".show-addresses").click(e => {
-            let userID = $(e.target).data('user-id');
-            let userName = $(e.target).data('user-name');
+        $(".show-addresses").click( function () {
+            let userID = $(this).data('user-id');
+            let userName = $(this).data('user-name');
 
             $.get('/api/addresses/' + userID).done(data => {
                 if ($.isEmptyObject(data)) {

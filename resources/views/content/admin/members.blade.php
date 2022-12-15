@@ -26,7 +26,7 @@
                         <tr>
                             <th class="text-center">#</th>
                             <th>
-                                <a href="{{ route('admin.users', [] + (!request()->has('sort') || request()->get('sort') == 'name' ? ['sort' => '-name'] : ['sort' => 'name'])) }}">Nome
+                                <a href="{{ route('admin.members.index', [] + (!request()->has('sort') || request()->get('sort') == 'name' ? ['sort' => '-name'] : ['sort' => 'name'])) }}">Nome
                                     <i class='bx bx-filter'></i>
                                 </a>
                             </th>
@@ -74,7 +74,7 @@
                                                 </a>
                                             @endcan
                                             @can('users.edit')
-                                                <a class="dropdown-item" href="{{ route('admin.user.show', $user->id) }}">
+                                                <a class="dropdown-item" href="{{ route('admin.members.edit', $user->id) }}">
                                                     <i class="bx bx-edit-alt me-1"></i>
                                                     Editar
                                                 </a>
@@ -120,10 +120,10 @@
     <!-- Modal de Add User -->
     <div class="modal fade" id="addUserModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-            <form class="modal-content" method="POST" action="{{ route('admin.users.store') }}">
+            <form class="modal-content" method="POST" action="{{ route('admin.members.store') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addUserTitle">Adicionar Novo Membro</h5>
+                    <h5 class="modal-title">Adicionar Novo Membro</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body py-3">
@@ -136,7 +136,7 @@
                                 <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
                                     <span class="d-none d-sm-block">Usar nova foto</span>
                                     <i class="bx bx-upload d-block d-sm-none"></i>
-                                    <input type="file" id="upload" name="profilePicture" class="account-file-input"
+                                    <input type="file" id="upload" name="profile_picture" class="account-file-input"
                                            hidden accept="image/png, image/jpeg, image/gif"/>
                                 </label>
                                 <button type="button" class="btn btn-outline-secondary account-image-reset mb-4">
@@ -152,37 +152,37 @@
                         <div class="row">
                             <div class="mb-3 col-12">
                                 <label for="userName" class="form-label">Nome</label><span class="fw-bold text-danger ms-1">*</span>
-                                <input class="form-control" type="text" id="userName" name="userName" value="{{ old('userName') }}" placeholder="..." autofocus/>
+                                <input class="form-control" type="text" id="userName" name="name" value="{{ old('name') }}" placeholder="..." autofocus/>
                             </div>
                             <div class="mb-3 col-12">
                                 <label for="emailAddress" class="form-label">E-mail</label><span class="fw-bold text-danger ms-1">*</span>
-                                <input class="form-control" type="text" name="emailAddress" id="emailAddress" value="{{ old('emailAddress') }}" placeholder="..."/>
+                                <input class="form-control" type="text" name="email" id="emailAddress" value="{{ old('email') }}" placeholder="..."/>
                             </div>
                             <div class="mb-3 col-12">
                                 <label for="mobilePhone" class="form-label">Celular</label>
                                 <div class="input-group input-group-merge">
                                     <span class="input-group-text highlighted">BR +55</span>
-                                    <input class="form-control phone-mask" type="text" id="mobilePhone" name="mobilePhone" value="{{ old('mobilePhone') }}" placeholder="(31) x xxxx-xxxx"/>
+                                    <input class="form-control phone-mask" type="text" id="mobilePhone" name="mobile_phone" value="{{ old('mobilePhone') }}" placeholder="(31) x xxxx-xxxx"/>
                                 </div>
                             </div>
                             <div class="mb-3 col-12">
                                 <label for="housePhone" class="form-label">Telefone Fixo</label>
                                 <div class="input-group input-group-merge">
                                     <span class="input-group-text highlighted">BR +55</span>
-                                    <input class="form-control housephone-mask" type="text" id="housePhone" name="housePhone" value="{{ old('housePhone') }}" placeholder="(31) xxxx-xxxx"/>
+                                    <input class="form-control housephone-mask" type="text" id="housePhone" name="house_phone" value="{{ old('house_phone') }}" placeholder="(31) xxxx-xxxx"/>
                                 </div>
                             </div>
                             <div class="mb-3 col-12">
                                 <label class="form-label" for="enrollmentOrigin">Igreja de Origem</label>
-                                <input type="text" id="enrollmentOrigin" name="enrollmentOrigin" class="form-control" placeholder="..." value="{{ old('enrollmentOrigin') }}"/>
+                                <input type="text" id="enrollmentOrigin" name="enrollment_origin" class="form-control" placeholder="..." value="{{ old('enrollment_origin') }}"/>
                             </div>
                             <div class="mb-3 col-12">
                                 <label for="enrollmentDate" class="form-label">Data de Arrolamento</label>
-                                <input class="form-control date-mask" type="text" id="enrollmentDate" name="enrollmentDate" placeholder="xx/xx/xxxx"  value="{{ old('enrollmentDate') }}"/>
+                                <input class="form-control date-mask" type="text" id="enrollment_date" name="enrollment_date" placeholder="xx/xx/xxxx"  value="{{ old('enrollment_date') }}"/>
                             </div>
                             <div class="mb-3 col-12">
                                 <label class="form-label" for="birthDate">Data de Nascimento</label><span class="fw-bold text-danger ms-1">*</span>
-                                <input class="form-control date-mask" type="text" id="birthDate" name="birthDate" value="{{ old('birthDate') }}" placeholder="xx/xx/xxxx"/>
+                                <input class="form-control date-mask" type="text" id="birthDate" name="birth_date" value="{{ old('birth_date') }}" placeholder="xx/xx/xxxx"/>
                             </div>
 
                             <div class="mb-3 col-12">
@@ -195,9 +195,9 @@
 
                             <div class="mb-3 col-12">
                                 <label class="form-label" for="gender">Família</label>
-                                <select id="family" name="family" class="select2 form-select">
+                                <select id="family" name="family_id" class="select2 form-select">
                                     <optgroup label="Selecione uma família">
-                                        <option selected value="0">Nenhuma</option>
+                                        <option selected value="">Nenhuma</option>
                                         @foreach($families as $family)
                                             <option
                                                 value="{{ $family->id }}">{{ $family->name }}</option>

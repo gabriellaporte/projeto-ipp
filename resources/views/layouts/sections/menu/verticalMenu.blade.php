@@ -84,8 +84,8 @@
             </a>
         </li>
 
-        <li class="menu-item {{ request()->routeIs('admin.users') ? 'active' : '' }}">
-            <a href="{{ route('admin.users') }}" class="menu-link">
+        <li class="menu-item {{ request()->routeIs('admin.members.index') ? 'active' : '' }}">
+            <a href="{{ route('admin.members.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-user"></i>
                 <div>Membros</div>
             </a>

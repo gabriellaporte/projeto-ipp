@@ -2,123 +2,81 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\AccountSettingsRequest;
 use App\Http\Requests\ProfileRequest;
+use App\Http\Requests\StoreUserRequest;
 use App\Models\Address;
 use App\Models\Family;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 use Spatie\Permission\Models\Role;
 use Spatie\QueryBuilder\QueryBuilder;
+use Symfony\Component\HttpKernel\Profiler\Profile;
 
-class MemberController extends AdminController
+class MemberController extends Controller
 {
-    public function __construct()
+    public function index(): View
     {
-        parent::__construct();
-    }
-
-    /**
-     * Visualiza todos os membros da igreja
-     *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
-     */
-    public function showMembers()
-    {
-        $users = QueryBuilder::for(User::class)
-            ->allowedFilters('name')
+        $users = QueryBuilder::for(User::class)->allowedFilters('name')
             ->allowedSorts('name')
-            ->orderBy('name', 'asc')
+            ->orderBy('name')
             ->paginate(10);
         $families = Family::orderBy('name', 'asc')->get();
 
-        return view('content.admin.user')
-            ->with('users', $users)
+        return view('content.admin.members')->with('users', $users)
             ->with('families', $families);
     }
 
-    /**
-     * Mostra o perfil de um usuário pronto para edição, semelhante à ação de AccountController/index
-     *
-     * @param $id | ID do usuário que será editado
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
-     */
-    public function showEditUser($id)
+    public function edit(User $user): View
     {
-        $user = User::find($id);
         $roles = Role::orderBy('id', 'desc')->get();
         $addresses = Address::where('user_id', $user->id)->get();
         $families = Family::orderBy('name', 'asc')->get();
 
-        if (is_null($user)) {
-            return redirect()
-                ->back()
-                ->withErrors('Não foi possível encontrar este usuário.');
-        }
-
-        return view('content.account.account-settings', ['user' => $user, 'roles' => $roles, 'addresses' => $addresses, 'families' => $families]);
+        return view('content.account.account-settings',
+            ['editing' => true, 'user' => $user, 'roles' => $roles, 'addresses' => $addresses, 'families' => $families]
+        );
     }
 
-    /**
-     * Cria um novo usuário com base nos dados enviados
-     *
-     * @param ProfileRequest $request   |   Dados enviados e validados
-     * @return mixed
-     */
-    public function store(ProfileRequest $request) {
-        $user = new User;
+    public function update(AccountSettingsRequest $request, User $user): RedirectResponse
+    {
+        $user->update($request->except('_method', '_token', 'profile_picture'));
 
-        $user = User::create([
-            'name' => $request->userName,
-            'email' => $request->emailAddress,
-            'password' => Hash::make(Str::random(6)),
-            'mobile_phone' => $request->mobilePhone,
-            'house_phone' => $request->housePhone,
-            'birth_date' => Carbon::createFromFormat('d/m/Y', $request->birthDate)->format('Y-m-d'),
-            'enrollment_origin' => $request->enrollmentOrigin,
-            'enrollment_date' => !is_null($request->enrollmentDate) ? Carbon::createFromFormat('d/m/Y', $request->enrollmentDate)->format('Y-m-d') : null,
-            'gender' => $request->gender,
-            'family_id' => $request->family
-        ]);
-
-        if(!is_null($request->profilePicture))
-        {
-            $storeFile = $request->profilePicture->store('img/avatars');
-            $user->profile_picture = $storeFile;
+        if($request->profile_picture) {
+            $user->update(['profile_picture' => $request->profile_picture->store('img/avatars')]);
         }
 
-        return redirect()
-            ->back()
-            ->withSuccess('Você criou o usuário ' . $user->getShortName() . ' com sucesso. Você pode editá-lo agora!');
+        if($request->roles) {
+            $user->syncRoles($request->roles);
+        }
+
+        return back()->withSuccess('Você editou o perfil de ' . $user->getShortName() . ' com sucesso');
     }
 
-    /**
-     * Deleta um usuário pelo ID (soft delete)
-     *
-     * @param $id   |   ID do usuário
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function delete($id) {
-        $user = User::find($id);
+    public function store(StoreUserRequest $request): RedirectResponse
+    {
+        $user = User::create($request->except('_method', '_token', 'profile_picture'));
 
-        if(is_null($user)) {
-            return redirect()
-                ->back()
-                ->withErrors('Não foi possível encontrar este usuário. Tente novamente.');
+        if($request->profile_picture) {
+            $user->update(['profile_picture' => $request->profile_picture->store('img/avatars')]);
         }
 
-        if(auth()->user()->id == $id) {
-            return redirect()
-                ->back()
-                ->withErrors('Você não pode deletar a sua própria conta.');
+        return back()->withSuccess('Você adicionou um novo usuário com sucesso');
+    }
+
+    public function delete(User $user): RedirectResponse
+    {
+        if(auth()->user()->id == $user->id) {
+            return back()->withErrors('Você não pode deletar a sua própria conta.');
         }
 
         $user->delete();
 
-        return redirect()
-            ->back()
-            ->withSuccess('Você deletou o usuário ' . $user->name . ' com sucesso!');
+        return back()->withSuccess('Você deletou o usuário ' . $user->name . ' com sucesso!');
     }
 }

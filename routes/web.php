@@ -70,35 +70,32 @@ Route::group(['middleware' => 'auth', 'prefix' => 'minha-conta', 'as' => 'accoun
     });
 });
 
-// Endereços
-Route::post('/addresses/sync/{id?}', [AddressController::class, 'syncAddresses'])->name('addresses.sync');
-Route::get('/addresses/flush/{id?}', [AddressController::class, 'deleteAddresses'])->name('addresses.flush');
-Route::get('/addresses/{id}/destroy', [AddressController::class, 'destroy'])->name('addresses.delete');
-Route::get('/addresses/bairros/{city?}', [AddressController::class, 'getExistingAreas'])->name('addresses.areas.get');
-
-
 // Membros
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/aniversarios', [BirthdayController::class, 'index'])->name('birthdays');
 });
 
 // Admin
-Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
-    Route::get('/membros', [MemberController::class, 'showMembers'])->name('users');
-    Route::post('/membros/store', [MemberController::class, 'store'])->name('users.store');
-    Route::get('/membros/delete/{id}', [MemberController::class, 'delete'])->name('users.delete');
-    Route::get('/membro/{id}', [MemberController::class, 'showEditUser'])->name('user.show');
+Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'officer'], function () {
+    Route::get('/membros', [MemberController::class, 'index'])->name('members.index');
+    Route::get('/membros/{user}', [MemberController::class, 'edit'])->name('members.edit');
+    Route::put('/membros/update/{user}', [MemberController::class, 'update'])->name('members.update');
+    Route::post('/membros/store', [MemberController::class, 'store'])->name('members.store');
+    Route::get('/membros/delete/{user}', [MemberController::class, 'delete'])->name('users.delete');
 
     Route::get('/notificacoes', [AdminNotificationController::class, 'showNotifications'])->name('notifications');
     Route::post('/notificacoes/store', [AdminNotificationController::class, 'storeNotification'])->name('notifications.store');
     Route::post('/notificacoes/edit', [AdminNotificationController::class, 'editNotification'])->name('notifications.edit');
-    Route::get('/notificacoes/delete/{id}', [AdminNotificationController::class, 'deleteNotification'])->name('notifications.delete');
+    Route::get('/notificacoes/delete/{user}', [AdminNotificationController::class, 'deleteNotification'])->name('notifications.delete');
 
     Route::get('/familias', [FamilyController::class, 'showFamilies'])->name('families');
     Route::post('/familias/store', [FamilyController::class, 'storeFamily'])->name('families.store');
     Route::post('/familias/edit', [FamilyController::class, 'editFamily'])->name('families.edit');
     Route::get('/familias/delete/{id}', [FamilyController::class, 'deleteFamily'])->name('families.delete');
 });
+
+// Endereços
+Route::get('/addresses/bairros/{city?}', [AddressController::class, 'getExistingAreas'])->name('addresses.areas.get');
 
 // Usuário
 Route::post('/usuario/edit/{id?}', [UserController::class, 'edit'])->name('user.edit');

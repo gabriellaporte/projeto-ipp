@@ -2,14 +2,18 @@
 
 @section('title', 'Configurações do Perfil - Minha Conta')
 
-
 @section('content')
     <h4 class="fw-bold py-3 mb-4">
-        <span class="text-muted fw-light">Conta /</span> Configurações de Perfil
+        @if($editing === true)
+            <span class="text-muted fw-light">Admin / Membros / </span> {{ $user->name }}
+        @else
+            <span class="text-muted fw-light">Conta /</span> Configurações de Perfil
+        @endif
     </h4>
 
     <div class="row">
         <div class="col-md-12">
+            @if($editing === false)
             <ul class="nav nav-pills flex-column flex-md-row mb-3">
                 <li class="nav-item">
                     <a class="nav-link active" href="javascript:void(0);"><i class="bx bx-user me-1"></i> Configurações de Perfil</a>
@@ -18,17 +22,18 @@
                     <a class="nav-link" href="{{ route('account.notifications.config.edit') }}"><i class="bx bx-bell me-1"></i> Configurações de Notificações</a>
                 </li>
             </ul>
+            @endif
             <div class="card mb-4">
                 <h5 class="card-header d-flex flex-column pb-2">Detalhes do Perfil
-                    <span class="text-muted mt-1 fw-semibold" style="font-size: 0.8rem;">(Atualizado em {{ \Carbon\Carbon::parse(auth()->user()->updated_at)->translatedFormat('d/m/Y à\s H:m') }})</span>
+                    <span class="text-muted mt-1 fw-semibold" style="font-size: 0.8rem;">(Atualizado em {{ \Carbon\Carbon::parse($user->updated_at)->translatedFormat('d/m/Y à\s H:m') }})</span>
                 </h5>
                 <!-- Account -->
-                <form id="formAccountSettings" method="POST"  action="{{ route('account.settings.update', auth()->user()->id) }}" enctype="multipart/form-data">
+                <form id="formAccountSettings" method="POST"  action="{{ $editing ? route('admin.members.update', $user->id) : route('account.settings.update', $user->id) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="card-body">
                         <div class="d-flex align-items-start align-items-sm-center gap-4">
-                            <img src="{{asset('storage/' . auth()->user()->profile_picture )}}" alt="user-avatar"
+                            <img src="{{asset('storage/' . $user->profile_picture )}}" alt="user-avatar"
                                  class="d-block rounded" height="100" width="100" id="uploadedAvatar"
                                  style="border-radius: 999rem !important;"/>
                             <div class="button-wrapper">
@@ -53,19 +58,19 @@
                             <div class="mb-3 col-md-6">
                                 <label for="userName" class="form-label">Nome</label>
                                 <input class="form-control" type="text" id="userName" name="name"
-                                       value="{{ auth()->user()->name }}" autofocus @cannot('users.edit') readonly @endcannot/>
+                                       value="{{ $user->name }}" autofocus @cannot('users.edit') readonly @endcannot/>
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="emailAddress" class="form-label">E-mail</label>
                                 <input class="form-control" type="text" name="email" id="emailAddress"
-                                       value="{{ auth()->user()->email }}"/>
+                                       value="{{ $user->email }}"/>
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="mobilePhone" class="form-label">Celular</label>
                                 <div class="input-group input-group-merge">
                                     <span class="input-group-text highlighted">BR +55</span>
                                     <input class="form-control phone-mask" type="text" id="mobilePhone"
-                                           name="mobile_phone" value="{{ auth()->user()->mobile_phone }}"
+                                           name="mobile_phone" value="{{ $user->mobile_phone }}"
                                            placeholder="(31) x xxxx-xxxx"/>
                                 </div>
                             </div>
@@ -75,20 +80,20 @@
                                     <span class="input-group-text highlighted">BR +55</span>
                                     <input class="form-control housephone-mask" type="text" id="housePhone"
                                            name="house_phone" placeholder="(31) xxxx-xxxx"
-                                           value="{{ auth()->user()->house_phone }}"/>
+                                           value="{{ $user->house_phone }}"/>
                                 </div>
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="enrollmentOrigin">Igreja de Origem</label>
                                 <input type="text" id="enrollmentOrigin" name="enrollment_origin" class="form-control"
-                                       placeholder="..." value="{{ auth()->user()->enrollment_origin }}"
+                                       placeholder="..." value="{{ $user->enrollment_origin }}"
                                        @cannot('users.edit') readonly @endcannot/>
                             </div>
                             <div class="mb-3 col-md-6">
                                 <label for="enrollmentDate" class="form-label">Data de Arrolamento</label>
                                 <input class="form-control date-mask" type="text" id="enrollmentDate"
                                        name="enrollment_date" placeholder="xx/xx/xxxx"
-                                       value="{{ !is_null(auth()->user()->enrollment_date) ? \Carbon\Carbon::parse(auth()->user()->enrollment_date)->format('d/m/Y') : ''}}"
+                                       value="{{ !is_null($user->enrollment_date) ? \Carbon\Carbon::parse($user->enrollment_date)->format('d/m/Y') : ''}}"
                                        @cannot('users.edit') readonly @endcannot/>
                             </div>
 
@@ -96,15 +101,15 @@
                                 <label class="form-label" for="birthDate">Data de Nascimento</label>
                                 <input class="form-control date-mask" type="text" id="birthDate" name="birth_date"
                                        placeholder="xx/xx/xxxx"
-                                       value="{{ \Carbon\Carbon::parse(auth()->user()->birth_date)->format('d/m/Y') }}"/>
+                                       value="{{ \Carbon\Carbon::parse($user->birth_date)->format('d/m/Y') }}"/>
                             </div>
 
                             <div class="mb-3 col-md-6">
                                 <label class="form-label" for="gender">Gênero</label>
                                 <select id="gender" name="gender" class="select2 form-select"
                                         @cannot('users.edit') disabled @endcannot>
-                                    <option value="M" {{ auth()->user()->gender == 'M' ? 'selected' : '' }}>Masculino</option>
-                                    <option value="F" {{ auth()->user()->gender == 'F' ? 'selected' : '' }}>Feminino</option>
+                                    <option value="M" {{ $user->gender == 'M' ? 'selected' : '' }}>Masculino</option>
+                                    <option value="F" {{ $user->gender == 'F' ? 'selected' : '' }}>Feminino</option>
                                 </select>
                             </div>
                             <div class="mb-3 col-md-6">
@@ -114,7 +119,7 @@
                                     <optgroup label="Seus cargos">
                                         @foreach($roles as $role)
                                             <option
-                                                value="{{ $role->id }}" {{ auth()->user()->hasRole($role->name) ? 'selected' : '' }}>{{ $role->name }}</option>
+                                                value="{{ $role->id }}" {{ $user->hasRole($role->name) ? 'selected' : '' }}>{{ $role->name }}</option>
                                         @endforeach
                                     </optgroup>
                                 </select>
@@ -122,11 +127,11 @@
                             <div class="mb-3 col-md-6">
                                 <label for="family" class="form-label">Família</label>
                                 <select id="family" name="family_id" class="select2 form-select" @cannot('user.edit') disabled @endcannot>
-                                    <optgroup label="Selecione a família de {{ explode(' ', auth()->user()->name)[0] }}">
-                                        <option {{ is_null(auth()->user()->family_id) ? 'selected' : '' }} value="">Nenhuma</option>
+                                    <optgroup label="Selecione a família de {{ explode(' ', $user->name)[0] }}">
+                                        <option {{ is_null($user->family_id) ? 'selected' : '' }} value="">Nenhuma</option>
                                         @foreach($families as $family)
                                             <option
-                                                value="{{ $family->id }}" {{ auth()->user()->family_id == $family->id ? 'selected' : '' }}>{{ $family->name }}</option>
+                                                value="{{ $family->id }}" {{ $user->family_id == $family->id ? 'selected' : '' }}>{{ $family->name }}</option>
                                         @endforeach
                                     </optgroup>
                                 </select>
@@ -143,19 +148,21 @@
                 <!-- /Account -->
             </div>
             <div class="card">
-                <h5 class="card-header">Endereços</h5>
+                <h5 class="card-header">{{ $editing ? 'Endereços de ' . $user->getShortName() : 'Meus Endereços' }}</h5>
                 <div class="card-body">
                     <button type="button" id="addAddress" class="btn btn-outline-primary mb-3">
                         <span class="tf-icons bx bx-bookmark-alt-plus"></span>&nbsp; Adicionar
                     </button>
-                    <div class="mb-3 col-12 d-flex justify-content-center">
-                        <div class="alert alert-primary d-inline-block mb-0 text-center" role="alert">
-                            <i class="bx bx-info-circle d-none d-sm-inline-block" style="margin-top: -2px;"></i>&nbsp;
-                            Os seus endereços são privados e somente oficiais conseguem vê-los!&nbsp;
-                            <button type="button" class="btn-close d-none d-sm-inline-block" data-bs-dismiss="alert"
-                                    aria-label="Close"></button>
+                    @if(!$editing)
+                        <div class="mb-3 col-12 d-flex justify-content-center">
+                            <div class="alert alert-primary d-inline-block mb-0 text-center" role="alert">
+                                <i class="bx bx-info-circle d-none d-sm-inline-block" style="margin-top: -2px;"></i>&nbsp;
+                                Os seus endereços são privados e somente oficiais conseguem vê-los!&nbsp;
+                                <button type="button" class="btn-close d-none d-sm-inline-block" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                            </div>
                         </div>
-                    </div>
+                    @endif
                     <form id="formAddresses" method="POST" action="{{ route('account.addresses.sync') }}">
                         @csrf
 
@@ -456,6 +463,7 @@
     </script>
 
     <script>
+        /*
         $("#formAccountSettings").submit( e => {
             let birthDate = $('#birthDate').val();
             let [birthDay, birthMonth, birthYear] = birthDate.split('/');
@@ -466,6 +474,6 @@
             let [day, month, year] = enrollmentDate.split('/');
             let enrollmentResult = [year, month, day].join('-');
             $('#enrollmentDate').val(enrollmentResult);
-        });
+        });*/
     </script>
 @endsection

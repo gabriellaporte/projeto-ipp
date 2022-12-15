@@ -9,14 +9,10 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class AccountSettingsRequest extends FormRequest
+class StoreUserRequest extends FormRequest
 {
     public function authorize()
     {
-        if(!request()->user || (request()->user->id != auth()->user()->id && !auth()->user()->can('users.edit'))) {
-            return false;
-        }
-
         return true;
     }
 
@@ -24,8 +20,8 @@ class AccountSettingsRequest extends FormRequest
     {
         return [
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:4000',
-            'name' => ['required', 'string', Rule::unique('users', 'name')->ignore($this->route('user') ?? auth()->user()->id)->whereNull('deleted_at')],
-            'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($this->route('user') ?? auth()->user()->id)],
+            'name' => ['required', 'string', Rule::unique('users', 'name')->whereNull('deleted_at')],
+            'email' => ['required', 'email', Rule::unique('users', 'email')],
             'mobile_phone' => ['nullable', 'string', new MobilePhoneRule()],
             'house_phone' => ['nullable', 'string', new HousePhoneRule()],
             'birth_date' => ['required', 'string', new DateStringRule()],
@@ -68,8 +64,8 @@ class AccountSettingsRequest extends FormRequest
     public function prepareForValidation()
     {
         $this->merge([
-            'birth_date' => Carbon::createFromFormat('d/m/Y', $this->birth_date)->format('Y-m-d'),
-            'enrollment_date' => Carbon::createFromFormat('d/m/Y', $this->enrollment_date)->format('Y-m-d'),
+            'birth_date' => $this->birth_date ? Carbon::createFromFormat('d/m/Y', $this->birth_date)->format('Y-m-d') : null,
+            'enrollment_date' => $this->enrollment_date ? Carbon::createFromFormat('d/m/Y', $this->enrollment_date)->format('Y-m-d') : null,
         ]);
     }
 }

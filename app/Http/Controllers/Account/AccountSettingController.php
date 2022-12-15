@@ -20,12 +20,16 @@ class AccountSettingController extends Controller
         $addresses = Address::where('user_id', auth()->user()->id)->get();
         $families = Family::orderBy('name', 'asc')->get();
 
-        return view('content.account.account-settings', ['roles' => $roles, 'addresses' => $addresses, 'families' => $families]);
+        return view('content.account.account-settings', ['editing' => false, 'user' => auth()->user(), 'roles' => $roles, 'addresses' => $addresses, 'families' => $families]);
     }
 
     public function update(AccountSettingsRequest $request, User $user): RedirectResponse
     {
-        $user->update($request->except('_method', '_token'));
+        $user->update($request->except('_method', '_token', 'profile_picture'));
+
+        if($request->profile_picture) {
+            $user->update(['profile_picture' => $request->profile_picture->store('img/avatars')]);
+        }
 
         if($request->roles) {
             $user->syncRoles($request->roles);
