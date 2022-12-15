@@ -463,17 +463,6 @@
     </script>
 
     <script>
-        /*
-        $("#formAccountSettings").submit( e => {
-            let birthDate = $('#birthDate').val();
-            let [birthDay, birthMonth, birthYear] = birthDate.split('/');
-            let result = [birthYear, birthMonth, birthDay].join('-');
-            $('#birthDate').val(result);
 
-            let enrollmentDate = $('#enrollmentDate').val();
-            let [day, month, year] = enrollmentDate.split('/');
-            let enrollmentResult = [year, month, day].join('-');
-            $('#enrollmentDate').val(enrollmentResult);
-        });*/
     </script>
 @endsection

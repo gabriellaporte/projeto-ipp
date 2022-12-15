@@ -6,116 +6,60 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreFamilyRequest;
 use App\Models\Family;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class FamilyController extends AdminController
 {
-    public function __construct()
+    public function index(): View
     {
-        parent::__construct();
-    }
-
-    /**
-     * Exibe a lista de famílias ativas e inativas
-     *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
-     */
-    public function showFamilies() {
         $families = Family::orderBy('name', 'asc')->paginate(10);
         $users = User::orderBy('name', 'asc')->get(); // Todos usuários
         $unassignedUsers = User::whereNull('family_id')->orderBy('name', 'asc')->get(); // Usuários sem família vinculada
 
-        return view('content.admin.families')
-            ->with('families', $families)
-            ->with('unassignedUsers', $unassignedUsers)
-            ->with('users', $users);
+        return view('content.admin.families', compact('families', 'unassignedUsers', 'users'));
     }
 
-    /**
-     * Armazena uma nova família com os dados enviados (nome e usuários a serem vinculados)
-     *
-     * @param StoreFamilyRequest $request   |   Dados enviados
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function storeFamily(StoreFamilyRequest $request) {
-        $users = json_decode($request->users) ?? [];
-
-        $existingName = Family::where('name', $request->name)->exists();
-        if($existingName) {
-            return redirect()
-                ->back()
-                ->withErrors('Já existe uma família com este nome.');
-        }
+    public function store(StoreFamilyRequest $request): RedirectResponse
+    {
+        $users = collect(json_decode($request->users)) ?? [];
 
         $family = Family::create([
             'name' => $request->name
         ]);
 
-        foreach($users as $user) {
-            User::find($user->value)->update(['family_id' => $family->id]);
-        }
+        User::whereIn('id', $users->pluck('value'))->update([
+            'family_id' => $family->id
+        ]);
 
-        return redirect()
-            ->back()
-            ->withSuccess('Você criou a família ' . $family->name . ' com sucesso!');
+        return back()->withSuccess('Você criou a família ' . $family->name . ' com sucesso!');
     }
 
-    /**
-     * Edita uma família com os dados enviados (nome e usuários a serem vinculados)
-     *
-     * @param StoreFamilyRequest $request   |   Dados enviados
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function editFamily(StoreFamilyRequest $request) {
-        $users = json_decode($request->users) ?? [];
+    public function update(Family $family, StoreFamilyRequest $request): RedirectResponse
+    {
+        $users = collect(json_decode($request->users)) ?? [];
 
-        $family = Family::find($request->id);
 
-        if(is_null($family)) {
-            return redirect()
-                ->back()
-                ->withErrors('Não foi possível encontrar a família acessada. Tente novamente.');
-        }
+        $family->update([
+            'name' => $request->name
+        ]);
 
-        $existingName = Family::where('name', $request->name)->where('id', '!=', $request->id)->exists();
-        if($existingName) {
-            return redirect()
-                ->back()
-                ->withErrors('Já existe uma família com este nome.');
-        }
+        // Retirar a família de todos usuários para atualizar novamente
+        User::where('family_id', $family->id)->update(['family_id' => null]);
 
-        $family->update(['name' => $request->name]);
+        // Setar a família nos usuários atuais
+        User::whereIn('id', $users->pluck('value'))->update([
+            'family_id' => $family->id
+        ]);
 
-        User::where('family_id', $request->id)->update(['family_id' => null]);
-
-        foreach($users as $user) {
-            User::find($user->value)->update(['family_id' => $family->id]);
-        }
-
-        return redirect()
-            ->back()
-            ->withSuccess('Você editou a família ' . $family->name . ' com sucesso!');
+        return back()->withSuccess('Você editou a família ' . $family->name . ' com sucesso!');
     }
 
-    /**
-     * Deleta uma família pelo seu ID
-     *
-     * @param $id   |   ID da família
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function deleteFamily($id) {
-        $family = Family::find($id);
-
-        if(is_null($family)) {
-            return redirect()
-                ->back()
-                ->withErrors('Houve um problema no banco de dados. Tente novamente.');
-        }
-
+    public function delete(Family $family): RedirectResponse
+    {
         $family->delete();
 
-        return redirect()
-            ->back()
-            ->withSuccess('Você deletou a família ' . $family->name . ' com sucesso!');
+        return back()->withSuccess('Você deletou a família ' . $family->name . ' com sucesso!');
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreFamilyRequest extends FormRequest
 {
@@ -24,7 +25,7 @@ class StoreFamilyRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'  => 'required|string',
+            'name'  => ['required', 'string', Rule::unique('families', 'name')->ignore($this->route('family'))],
             'users' => 'nullable'
         ];
     }
@@ -34,6 +35,7 @@ class StoreFamilyRequest extends FormRequest
         return [
             'name.required' => 'Você precisa especificar o sobrenome identificador da família.',
             'name.string' => 'O sobrenome da família deve ser um texto.',
+            'name.unique' => 'Já existe uma família com este nome.',
         ];
     }
 }

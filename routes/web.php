@@ -81,17 +81,17 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'officer'],
     Route::get('/membros/{user}', [MemberController::class, 'edit'])->name('members.edit');
     Route::put('/membros/update/{user}', [MemberController::class, 'update'])->name('members.update');
     Route::post('/membros/store', [MemberController::class, 'store'])->name('members.store');
-    Route::get('/membros/delete/{user}', [MemberController::class, 'delete'])->name('users.delete');
+    Route::delete('/membros/delete/{user}', [MemberController::class, 'delete'])->name('members.delete');
+
+    Route::get('/familias', [FamilyController::class, 'index'])->name('families');
+    Route::post('/familias/store', [FamilyController::class, 'store'])->name('families.store');
+    Route::put('/familias/update/{family}', [FamilyController::class, 'update'])->name('families.update');
+    Route::delete('/familias/delete/{family}', [FamilyController::class, 'delete'])->name('families.delete');
 
     Route::get('/notificacoes', [AdminNotificationController::class, 'showNotifications'])->name('notifications');
     Route::post('/notificacoes/store', [AdminNotificationController::class, 'storeNotification'])->name('notifications.store');
     Route::post('/notificacoes/edit', [AdminNotificationController::class, 'editNotification'])->name('notifications.edit');
     Route::get('/notificacoes/delete/{user}', [AdminNotificationController::class, 'deleteNotification'])->name('notifications.delete');
-
-    Route::get('/familias', [FamilyController::class, 'showFamilies'])->name('families');
-    Route::post('/familias/store', [FamilyController::class, 'storeFamily'])->name('families.store');
-    Route::post('/familias/edit', [FamilyController::class, 'editFamily'])->name('families.edit');
-    Route::get('/familias/delete/{id}', [FamilyController::class, 'deleteFamily'])->name('families.delete');
 });
 
 // Endereços

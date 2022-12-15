@@ -123,11 +123,12 @@
         </div>
     </div>
 
-    <!-- Modal de edição de notificações -->
+    <!-- Modal de edição de família -->
     <div class="modal fade" id="editFamilyModal" data-keyboard="false" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-            <form class="modal-content" method="POST" action="{{ route('admin.families.edit') }}">
+            <form class="modal-content" method="POST" action="{{ route('admin.families.update', 0) }}">
                 @csrf
+                @method('PUT')
                 <div class="modal-header">
                     <h5 class="modal-title">Editar Família</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -135,7 +136,6 @@
                 <div class="modal-body py-3">
                     <div class="card-body">
                         <div class="row">
-                            <input type="hidden" name="id" id="familyID">
                             <div class="mb-3 col-12">
                                 <label for="name" class="form-label">Sobrenome</label><span class="fw-bold text-danger ms-1">*</span>
                                 <input class="form-control" type="text" id="name" name="name" value="" placeholder="..." autofocus/>
@@ -159,6 +159,11 @@
             </form>
         </div>
     </div>
+
+    <form method="POST" id="deleteFamilyForm" action="{{ route('admin.families.delete', 0) }}">
+        @csrf
+        @method('DELETE')
+    </form>
 @endsection
 
 @section('page-script')
@@ -169,7 +174,9 @@
             let deleteCondition = window.confirm("Você tem certeza que gostaria de deletar esta família?");
 
             if(deleteCondition) {
-                window.location.href = 'http://localhost:8000/admin/familias/delete/' + family;
+                $("#deleteFamilyForm").attr('action', 'http://localhost:8000/admin/familias/delete/' + family);
+
+                $("#deleteFamilyForm").submit();
             }
         });
     </script>
@@ -398,7 +405,7 @@
             let familyID = $(this).data('family-id');
 
             $.get('/api/family/' + familyID).done(data => {
-                $("#editFamilyModal #familyID").val(familyID);
+                $("#editFamilyModal form").attr('action', 'http://localhost:8000/admin/familias/update/' + familyID);
                 $("#editFamilyModal #name").val(data.name);
                 $("#editFamilyModal #usersTagify").val(JSON.stringify(data.users));
 

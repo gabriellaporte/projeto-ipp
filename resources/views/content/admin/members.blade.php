@@ -215,6 +215,11 @@
             </form>
         </div>
     </div>
+
+    <form method="POST" id="deleteMemberForm" action="{{ route('admin.members.delete', 0) }}">
+        @csrf
+        @method('DELETE')
+    </form>
 @endsection
 
 @section('page-script')
@@ -291,7 +296,9 @@
             let deleteCondition = window.confirm("Você tem certeza que gostaria de deletar este usuário?");
 
             if(deleteCondition) {
-                window.location.href = 'http://localhost:8000/admin/membros/delete/' + user;
+                $("#deleteMemberForm").attr('action', 'http://localhost:8000/admin/membros/delete/' + user);
+
+                $("#deleteMemberForm").submit();
             }
         });
     </script>
