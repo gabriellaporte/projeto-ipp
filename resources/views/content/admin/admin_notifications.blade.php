@@ -31,8 +31,8 @@
                                     <td style="width: 150px;">
                                         <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center justify-content-center">
                                             @foreach($notification->users as $key => $singleNotification)
-                                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" title="{{ $singleNotification->user->name }}">
-                                                <img src="{{asset('storage/' . $singleNotification->user->profile_picture )}}" alt="Avatar" class="rounded-circle">
+                                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" title="{{ $singleNotification->user?->name }}">
+                                                <img src="{{asset('storage/' . $singleNotification->user?->profile_picture )}}" alt="Avatar" class="rounded-circle">
                                             </li>
                                                 @if($key >= 2 && count($notification->users) - 3)
                                                     <span class="ms-1">+{{ count($notification->users) - 3 }}</span>
@@ -92,7 +92,7 @@
                             </div>
                             <div class="mb-3 col-12">
                                 <label for="content" class="form-label">Conteúdo da Notificação</label><span class="fw-bold text-danger ms-1">*</span>
-                                <textarea class="form-control" type="text" name="message" id="content" rows="3">{{ old('content') }}</textarea>
+                                <textarea class="form-control" type="text" name="content" id="content" rows="3">{{ old('content') }}</textarea>
                             </div>
                             <div class="mb-3 col-12">
                                 <div class="d-flex justify-content-between">
@@ -119,8 +119,9 @@
     <!-- Modal de edição de notificações -->
     <div class="modal fade" id="editNotificationModal" data-keyboard="false" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-            <form class="modal-content" method="POST" action="{{ route('admin.notifications.edit') }}">
+            <form class="modal-content" method="POST" action="{{ route('admin.notifications.update', 0) }}">
                 @csrf
+                @method("PUT")
                 <div class="modal-header">
                     <h5 class="modal-title">Editar Notificação</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -135,7 +136,7 @@
                             </div>
                             <div class="mb-3 col-12">
                                 <label for="content" class="form-label">Conteúdo da Notificação</label><span class="fw-bold text-danger ms-1">*</span>
-                                <textarea class="form-control" type="text" name="message" id="content" rows="3">{{ old('content') }}</textarea>
+                                <textarea class="form-control" type="text" name="content" id="content" rows="3">{{ old('content') }}</textarea>
                             </div>
                             <div class="mb-3 col-12">
                                 <div class="d-flex justify-content-between">
@@ -156,6 +157,11 @@
             </form>
         </div>
     </div>
+
+    <form method="POST" id="deleteNotificationForm" action="{{ route('admin.notifications.delete', 0) }}">
+        @csrf
+        @method('DELETE')
+    </form>
 @endsection
 
 @section('page-script')
@@ -383,8 +389,7 @@
             let notificationID = $(this).data('notification-id');
 
             $.get('/api/notification/' + notificationID).done(data => {
-
-                $("#editNotificationModal #notificationID").val(notificationID);
+                $("#editNotificationModal form").attr('action', 'http://localhost:8000/admin/notificacoes/update/' + notificationID);
                 $("#editNotificationModal #title").val(data.title);
                 $("#editNotificationModal #content").html(data.content);
                 $("#editNotificationModal #usersTagify").val(JSON.stringify(data.users));
@@ -403,7 +408,9 @@
             let deleteCondition = window.confirm("Você tem certeza que gostaria de deletar esta notificação?");
 
             if(deleteCondition) {
-                window.location.href = 'http://localhost:8000/admin/notificacoes/delete/' + notification;
+                $("#deleteNotificationForm").attr('action', 'http://localhost:8000/admin/notificacoes/delete/' + notification);
+
+                $("#deleteNotificationForm").submit();
             }
         });
     </script>

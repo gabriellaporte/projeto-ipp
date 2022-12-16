@@ -77,8 +77,8 @@
             <span class="menu-header-text">Oficiais</span>
         </li>
 
-        <li class="menu-item {{ request()->routeIs('admin.families') ? 'active' : '' }}">
-            <a href="{{ route('admin.families') }}" class="menu-link">
+        <li class="menu-item {{ request()->routeIs('admin.families.index') ? 'active' : '' }}">
+            <a href="{{ route('admin.families.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-group"></i>
                 <div>Famílias</div>
             </a>
@@ -91,8 +91,8 @@
             </a>
         </li>
 
-        <li class="menu-item {{ request()->routeIs('admin.notifications') ? 'active' : '' }}">
-            <a href="{{ route('admin.notifications') }}" class="menu-link">
+        <li class="menu-item {{ request()->routeIs('admin.notifications.index') ? 'active' : '' }}">
+            <a href="{{ route('admin.notifications.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-bell-plus"></i>
                 <div>Notificações</div>
             </a>

@@ -23,7 +23,7 @@ class FamilyController extends AdminController
 
     public function store(StoreFamilyRequest $request): RedirectResponse
     {
-        $users = collect(json_decode($request->users)) ?? [];
+        $users = collect($request->users) ?? [];
 
         $family = Family::create([
             'name' => $request->name
@@ -38,8 +38,7 @@ class FamilyController extends AdminController
 
     public function update(Family $family, StoreFamilyRequest $request): RedirectResponse
     {
-        $users = collect(json_decode($request->users)) ?? [];
-
+        $users = collect($request->users) ?? [];
 
         $family->update([
             'name' => $request->name

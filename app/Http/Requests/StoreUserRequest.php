@@ -20,7 +20,7 @@ class StoreUserRequest extends FormRequest
     {
         return [
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:4000',
-            'name' => ['required', 'string', Rule::unique('users', 'name')->whereNull('deleted_at')],
+            'name' => ['required', 'string', Rule::unique('users', 'name')],
             'email' => ['required', 'email', Rule::unique('users', 'email')],
             'mobile_phone' => ['nullable', 'string', new MobilePhoneRule()],
             'house_phone' => ['nullable', 'string', new HousePhoneRule()],

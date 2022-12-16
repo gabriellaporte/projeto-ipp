@@ -285,8 +285,8 @@
             ]);
         }
 
-        $("#addNotificationModal .remove-all-notifications").click( function() {
-            $("#addNotificationModal #usersTagify").val('');
+        $("#addFamilyModal .remove-all-notifications").click( function() {
+            $("#addFamilyModal #usersTagify").val('');
         });
     </script>
 
@@ -394,8 +394,8 @@
             ]);
         }
 
-        $("#editNotificationModal .remove-all-notifications").click( function() {
-            $("#editNotificationModal #usersTagify").val('');
+        $("#editFamilyModal .remove-all-notifications").click( function() {
+            $("#editFamilyModal #usersTagify").val('');
         });
     </script>
 

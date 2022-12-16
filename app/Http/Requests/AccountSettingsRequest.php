@@ -24,7 +24,7 @@ class AccountSettingsRequest extends FormRequest
     {
         return [
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:4000',
-            'name' => ['required', 'string', Rule::unique('users', 'name')->ignore($this->route('user') ?? auth()->user()->id)->whereNull('deleted_at')],
+            'name' => ['required', 'string', Rule::unique('users', 'name')->ignore($this->route('user') ?? auth()->user()->id)],
             'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($this->route('user') ?? auth()->user()->id)],
             'mobile_phone' => ['nullable', 'string', new MobilePhoneRule()],
             'house_phone' => ['nullable', 'string', new HousePhoneRule()],

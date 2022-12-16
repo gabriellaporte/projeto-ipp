@@ -26,7 +26,7 @@ class StoreFamilyRequest extends FormRequest
     {
         return [
             'name'  => ['required', 'string', Rule::unique('families', 'name')->ignore($this->route('family'))],
-            'users' => 'nullable'
+            'users' => 'nullable|array'
         ];
     }
 
@@ -36,6 +36,14 @@ class StoreFamilyRequest extends FormRequest
             'name.required' => 'Você precisa especificar o sobrenome identificador da família.',
             'name.string' => 'O sobrenome da família deve ser um texto.',
             'name.unique' => 'Já existe uma família com este nome.',
+            'users.array' => 'Houve um erro com a seleção de usuários. Tente novamente.',
         ];
+    }
+
+    public function prepareForValidation()
+    {
+        $this->merge([
+            'users' => json_decode($this->users),
+        ]);
     }
 }

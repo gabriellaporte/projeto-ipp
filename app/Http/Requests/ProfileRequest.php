@@ -20,7 +20,7 @@ class ProfileRequest extends FormRequest
     {
         return [
             'profilePicture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:4000',
-            'userName' => ['required', 'string', Rule::unique('users', 'name')->ignore($this->route('id') ?? auth()->user()->id)->whereNull('deleted_at')],
+            'userName' => ['required', 'string', Rule::unique('users', 'name')->ignore($this->route('id') ?? auth()->user()->id)],
             'emailAddress' => ['required', 'email', Rule::unique('users', 'email')->ignore($this->route('id') ?? auth()->user()->id)],
             'mobilePhone' => ['nullable', 'string', new MobilePhoneRule()],
             'housePhone' => ['nullable', 'string', new HousePhoneRule()],
