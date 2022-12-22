@@ -16,8 +16,10 @@ use App\Http\Controllers\BirthdayController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
-use App\Models\Address;
-use App\Models\Notification;
+use App\Models\User;
+use App\Notifications\AdminNotification;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,6 +32,10 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/teste', function () {
+    $user = User::find(1);
+    Notification::send($user, new AdminNotification('titulo', 'mensagem', 1));
+});
 
 // Página inicial
 Route::get('/', [HomeController::class, 'index'])->name('index');
@@ -90,7 +96,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'officer'],
 
     Route::get('/notificacoes', [AdminNotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notificacoes/store', [AdminNotificationController::class, 'store'])->name('notifications.store');
-    Route::put('/notificacoes/update/{notification}', [AdminNotificationController::class, 'update'])->name('notifications.update');
+    Route::patch('/notificacoes/update/{notification}', [AdminNotificationController::class, 'update'])->name('notifications.update');
     Route::delete('/notificacoes/delete/{notification}', [AdminNotificationController::class, 'delete'])->name('notifications.delete');
 });
 

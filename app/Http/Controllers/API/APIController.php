@@ -55,21 +55,18 @@ class APIController extends Controller
             return [];
         }
 
-        /* Preparando a lista de usuários para se adequar aos moldes da whitelist do Tagify */
-        $users = array();
+        /* Preparando o usuário para se adequar aos moldes da whitelist do Tagify */
+        $user[] = [
+            'value' => $notification->user->id,
+            'name' => $notification->user->name,
+            'avatar' => asset('storage/' . $notification->user->profile_picture ),
+            'email' => $notification->user->email
+        ];
 
-        foreach($notification->users as $user) {
-            $users[] = [
-                'value' => $user->user->id,
-                'name' => $user->user->name,
-                'avatar' => asset('storage/' . $user->user->profile_picture ),
-                'email' => $user->user->email
-            ];
-        }
-        $response = $notification->toArray();
-        $response['users'] = $users;
 
-        return response()->json($response);
+        $notification['tagify_user'] = $user;
+
+        return response()->json($notification);
     }
 
     /**

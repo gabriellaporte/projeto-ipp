@@ -60,6 +60,19 @@ class User extends Authenticatable
     }
 
     /**
+     * Checa se um usuário tem a configuração de notificação
+     *
+     * @return boolean
+     */
+    public function isNotificationEnabled(string $settings)
+    {
+        return $this->notificationSettings()
+            ->where('name', $settings)
+            ->where('value', 1)
+            ->exists();
+    }
+
+    /**
      * Retorna o primeiro nome do usuário
      *
      * @return string
@@ -67,16 +80,6 @@ class User extends Authenticatable
     public function getShortName()
     {
         return explode(' ', $this->name)[0];
-    }
-
-    /**
-     * Retorna as notificações do usuário
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function notifications()
-    {
-        return $this->hasMany(UserNotification::class, 'user_id');
     }
 
     /**

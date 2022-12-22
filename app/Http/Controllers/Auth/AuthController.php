@@ -9,7 +9,7 @@ use Illuminate\View\View;
 
 class AuthController extends Controller
 {
-    public function index(): View
+    public function index(): mixed
     {
         if (auth()->check()) {
             return redirect()

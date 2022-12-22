@@ -21,7 +21,9 @@ class AddressController extends Controller
      * @return mixed    |   Array contendo somente o nome das cidades
      */
     public static function getExistingCities() {
-        $areas = Address::select('city')->distinct()->orderBy('city', 'asc')->get();
+        $areas = Address::select('city')->distinct()
+            ->orderBy('city', 'asc')
+            ->get();
 
         return $areas->pluck('city')->toArray();
     }
@@ -35,7 +37,7 @@ class AddressController extends Controller
     public static function getExistingAreas($city = null) {
         $areas = Address::select('area')->distinct()->orderBy('area', 'asc');
 
-        if(!is_null($city)) {
+        if($city) {
             $areas->where('city', $city);
         }
 

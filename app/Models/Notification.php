@@ -19,16 +19,27 @@ class Notification extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'title',
-        'content'
+        'data',
+        'sender_id'
     ];
 
-    /**
-     * Retorna a lista de notificações para usuários contendo esta mesma notificação
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function users() {
-        return $this->hasMany(UserNotification::class, 'notification_id');
+    private function getData()
+    {
+        return json_decode($this->data, true);
+    }
+
+    public function content()
+    {
+        return $this->getData()['content'];
+    }
+
+    public function title()
+    {
+        return $this->getData()['title'];
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'notifiable_id');
     }
 }
