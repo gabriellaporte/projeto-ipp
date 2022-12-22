@@ -16,25 +16,19 @@ use App\Http\Controllers\BirthdayController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
+use App\Mail\NotificationMailable;
 use App\Models\User;
 use App\Notifications\AdminNotification;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 Route::get('/teste', function () {
     $user = User::find(1);
-    Notification::send($user, new AdminNotification('titulo', 'mensagem', 1));
+    $user2 = User::find(3);
+
+    Notification::send($user, new AdminNotification('titussslo', 'mensagem', 1));
 });
 
 // Página inicial
@@ -98,6 +92,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'officer'],
     Route::post('/notificacoes/store', [AdminNotificationController::class, 'store'])->name('notifications.store');
     Route::patch('/notificacoes/update/{notification}', [AdminNotificationController::class, 'update'])->name('notifications.update');
     Route::delete('/notificacoes/delete/{notification}', [AdminNotificationController::class, 'delete'])->name('notifications.delete');
+
+    Route::get('/dizimos');
 });
 
 // Endereços

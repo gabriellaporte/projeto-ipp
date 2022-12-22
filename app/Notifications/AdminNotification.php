@@ -2,6 +2,8 @@
 
 namespace App\Notifications;
 
+use App\Mail\NotificationMailable;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -42,15 +44,16 @@ class AdminNotification extends Notification
      * Get the mail representation of the notification.
      *
      * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
+     * @return NotificationMailable
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-                    ->subject('teste')
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+        return (new NotificationMailable(
+                $notifiable,
+                $this->title,
+                $this->content,
+                User::find($this->getSenderID())
+            ))->to($notifiable->email);
     }
 
     /**
