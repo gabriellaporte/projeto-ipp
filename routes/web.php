@@ -55,7 +55,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'minha-conta', 'as' => 'accoun
     // Notificações
     Route::group(['prefix' => 'notificacoes', 'as' => 'notifications.'], function () {
         Route::get('/', [NotificationController::class, 'index'])->name('index');
-        Route::post('/read/{notification}', [NotificationController::class, 'read'])->name('read')
+        Route::patch('/read/{notification}', [NotificationController::class, 'read'])->name('read')
             ->missing(function($request) {
                 $response['status'] = 400;
                 $response['message'] = 'Notificação inválida. Tente novamente.';

@@ -20,7 +20,8 @@ class Notification extends Model
      */
     protected $fillable = [
         'data',
-        'sender_id'
+        'sender_id',
+        'read_at'
     ];
 
     private function getData()
@@ -41,5 +42,10 @@ class Notification extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'notifiable_id');
+    }
+
+    public function sender()
+    {
+        return $this->belongsTo(User::class, 'sender_id', 'id');
     }
 }

@@ -52,11 +52,9 @@
         <li class="menu-item {{ request()->routeIs('account.notifications.index') ? 'active' : '' }}">
             <a href="{{ route('account.notifications.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-bell position-relative">
-                    {{--
-                    @if(count(auth()->user()->notifications->where('read', 0)))
-                        <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger" style="position: absolute; top: 0; left: 0; width: 5px; height: 5px; font-size: 10px;">{{ count(auth()->user()->notifications->where('read', 0)) }}</span>
+                    @if(count(auth()->user()->notifications->whereNull('read_at')))
+                        <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger" style="position: absolute; top: 0; left: 0; width: 5px; height: 5px; font-size: 10px;">{{ count(auth()->user()->notifications->whereNull('read')) }}</span>
                     @endif
-                    --}}
                 </i>
                 <div>Notificações</div>
             </a>

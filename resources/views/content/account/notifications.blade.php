@@ -18,15 +18,15 @@
                         <div class="d-flex">
                             <div class="flex-shrink-0 me-3">
                                 <div class="avatar">
-                                    <img src="{{ !is_null($notification->sender_id) ? asset('/storage/' . $notification->sender->profile_picture) : asset('/assets/img/avatars/bot.png') }}" alt="" class="w-px-40 h-auto rounded-circle">
+                                    <img src="{{ $notification->sender_id ? asset('/storage/' . $notification->sender->profile_picture) : asset('/assets/img/avatars/bot.png') }}" alt="" class="w-px-40 h-auto rounded-circle">
                                 </div>
                             </div>
                             <div class="flex-grow-1" style="{{ $notification->read ? 'opacity: .75;' : '' }}">
-                                <h6 class="mb-1">{{ $notification->notification->title }}</h6>
-                                <p class="mb-0">{{ $notification->notification->content }}</p>
-                                <small class="text-muted">{{ $notification->created_at->diffForHumans() }}</small>
+                                <h6 class="mb-1">{{ $notification->title() }}</h6>
+                                <p class="mb-0">{{ $notification->content() }}</p>
+                                <small class="text-muted">{{ \Carbon\Carbon::parse($notification->created_at)->diffForHumans() }}</small>
                             </div>
-                            @if(!$notification->read)
+                            @if(!$notification->read_at)
                             <div class="flex-shrink-0 dropdown-notifications-actions">
                                 <a href="javascript:void(0)" class="dropdown-notifications-archive mark-read" data-notification-id="{{ $notification->id }}" title="Marcar como lida"><span class="bx bxs-circle" style="font-size: 12px;"></span></a>
                             </div>
@@ -50,9 +50,13 @@
         $(".mark-read").click( function() {
             let id = $(this).data("notification-id");
 
-
-            $.post('/minha-conta/notificacoes/read/' + id, {
-                _token: "{{ csrf_token() }}"
+            $.ajax({
+                url: '/minha-conta/notificacoes/read/' + id,
+                type: 'PATCH',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    _method: "PATCH"
+                }
             }).done(data => {
                 if(data.status == 400) {
                     return toastr.error(data.message);

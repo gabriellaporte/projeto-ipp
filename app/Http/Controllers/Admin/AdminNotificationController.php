@@ -28,7 +28,7 @@ class AdminNotificationController extends AdminController
                 ->toArray()
         )->get();
 
-        NotificationFacade::send($users, new AdminNotification($request->title, $request->content, auth()->user()->id));
+        NotificationFacade::send($users, new AdminNotification($request->title, $request->content , auth()->user()->id));
 
         return back()->withSuccess('Você enviou a notificação com sucesso!');
     }
@@ -40,7 +40,7 @@ class AdminNotificationController extends AdminController
             'sender_id' => auth()->user()->id
         ]);
 
-        return back()->withSuccess('Você alterou a notificação com sucesso! Esta alteração só surte efeito no nosso sistema: os e-mails enviados continuarão os mesmos.');
+        return back()->withSuccess('Você alterou a notificação com sucesso! Esta alteração só surte efeito no nosso sistema.');
     }
 
     public function delete(Notification $notification) {

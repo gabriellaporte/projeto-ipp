@@ -39,22 +39,3 @@ function canEditAddress($id)
 
     return false;
 }
-
-/**
- * Determina se um usuário logado pode marcar uma notificação em específico como lida
- *
- * @param $id   |   ID da notificação a ser verificada
- * @return bool
- */
-function canReadNotification($id)
-{
-    if (in_array($id, auth()->user()->notifications->pluck('id')->toArray())) {
-        return true;
-    }
-
-    if (auth()->user()->can('notifications.read')) {
-        return true;
-    }
-
-    return false;
-}

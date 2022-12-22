@@ -72,6 +72,11 @@ class User extends Authenticatable
             ->exists();
     }
 
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class, 'notifiable_id');
+    }
+
     /**
      * Retorna o primeiro nome do usuário
      *
