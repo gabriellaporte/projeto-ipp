@@ -6,10 +6,9 @@ use App\Mail\NotificationMailable;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class AdminNotification extends Notification
+class AdminNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
