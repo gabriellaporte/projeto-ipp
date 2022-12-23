@@ -54,11 +54,11 @@ class SearchController extends Controller
     {
         $addresses = Address::orderBy('id', 'asc');
 
-        if(!$request->search_city) {
+        if($request->search_city) {
             $addresses->where('city', $request->search_city);
         }
 
-        if(!$request->search_area) {
+        if($request->search_area) {
             $addresses->where('area', $request->search_area);
         }
 
