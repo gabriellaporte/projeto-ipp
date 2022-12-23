@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\AdminNotificationController;
 use App\Http\Controllers\Admin\FamilyController;
 use App\Http\Controllers\Admin\MemberController;
 use App\Http\Controllers\Admin\TitheController;
+use App\Http\Controllers\Admin\TithesOfferings\CategoryController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\AccountController;
@@ -85,6 +86,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'officer'],
     Route::delete('/notificacoes/delete/{notification}', [AdminNotificationController::class, 'delete'])->name('notifications.delete');
 
     Route::get('/dizimos', [TitheController::class, 'index'])->name('tithes.index');
+
+    Route::get('/dizimos/categorias', [CategoryController::class, 'index'])->name('tithes.category.index');
+    Route::post('/dizimos/categorias/store', [CategoryController::class, 'store'])->name('tithes.category.store');
+    Route::put('/dizimos/categorias/update/{category}', [CategoryController::class, 'update'])->name('tithes.category.update');
+    Route::delete('/dizimos/categorias/delete/{category}', [CategoryController::class, 'delete'])->name('tithes.category.delete');
 });
 
 // Endereços

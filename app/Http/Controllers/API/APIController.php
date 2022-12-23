@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Address;
 use App\Models\Family;
 use App\Models\Notification;
+use App\Models\TithesOfferings\TitheOfferingType;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -99,4 +100,12 @@ class APIController extends Controller
         return response()->json($response);
     }
 
+    /**
+     * Retorna uma categoria
+     *
+     * @param $id   |   O ID da notificação
+     */
+    public function getCategoryInfo(TitheOfferingType $category) {
+        return response()->json($category);
+    }
 }

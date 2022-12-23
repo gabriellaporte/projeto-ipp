@@ -21,7 +21,7 @@
                                     <img src="{{ $notification->sender_id ? asset('/storage/' . $notification->sender->profile_picture) : asset('/assets/img/avatars/bot.png') }}" alt="" class="w-px-40 h-auto rounded-circle">
                                 </div>
                             </div>
-                            <div class="flex-grow-1" style="{{ $notification->read ? 'opacity: .75;' : '' }}">
+                            <div class="flex-grow-1" style="{{ $notification->read_at ? 'opacity: .75;' : '' }}">
                                 <h6 class="mb-1">{{ $notification->title() }}</h6>
                                 <p class="mb-0">{{ $notification->content() }}</p>
                                 <small class="text-muted">{{ \Carbon\Carbon::parse($notification->created_at)->diffForHumans() }}</small>

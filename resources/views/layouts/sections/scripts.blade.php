@@ -66,18 +66,6 @@
 </script>
 <!-- END: Loader -->
 
-<!-- BEGIN: Dropdown Responsive Table -->
-<script>
-  $('.table-responsive').on('show.bs.dropdown', function () {
-    $('.table-responsive').css( "overflow", "inherit" );
-  });
-
-  $('.table-responsive').on('hide.bs.dropdown', function () {
-    $('.table-responsive').css( "overflow", "auto" );
-  })
-</script>
-<!-- END: Dropdown Responsive Table -->
-
 <!-- BEGIN: Select2 Initialize -->
 <script>
     $(document).ready(() => {

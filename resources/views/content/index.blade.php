@@ -51,7 +51,7 @@
 
                             </div>
                             <span class="fw-semibold d-block mb-1">Dízimos</span>
-                            <h3 class="card-title mb-2">R$ 6,540.53</h3>
+                            <h3 class="card-title text-nowrap mb-2">R$ 6,540.53</h3>
                             <small class="text-success fw-semibold"><i class='bx bx-up-arrow-alt'></i> + R$
                                 1,540.53</small>
                         </div>

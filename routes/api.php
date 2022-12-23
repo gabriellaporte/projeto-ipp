@@ -19,3 +19,4 @@ use Illuminate\Support\Facades\Route;
 Route::get('/addresses/{userID?}', [APIController::class, 'getUserAddresses'])->name('api.addresses');
 Route::get('/notification/{id}', [APIController::class, 'getNotification'])->name('api.notification');
 Route::get('/family/{id}', [APIController::class, 'getFamily'])->name('api.family');
+Route::get('/category/{category}', [APIController::class, 'getCategoryInfo'])->name('api.category');
