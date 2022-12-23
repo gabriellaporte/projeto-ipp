@@ -11,8 +11,6 @@ class Notification extends Model
 
     protected $table = 'notifications';
 
-    public $timestamps = false;
-
     /**
      * The attributes that are mass assignable.
      *

@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminNotificationController;
 use App\Http\Controllers\Admin\FamilyController;
 use App\Http\Controllers\Admin\MemberController;
+use App\Http\Controllers\Admin\TitheController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\AccountController;
@@ -23,13 +24,6 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Route;
-
-Route::get('/teste', function () {
-    $user = User::find(1);
-    $user2 = User::find(3);
-
-    Notification::send($user, new AdminNotification('titussslo', 'mensagem', 1));
-});
 
 // Página inicial
 Route::get('/', [HomeController::class, 'index'])->name('index');
@@ -93,7 +87,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'officer'],
     Route::patch('/notificacoes/update/{notification}', [AdminNotificationController::class, 'update'])->name('notifications.update');
     Route::delete('/notificacoes/delete/{notification}', [AdminNotificationController::class, 'delete'])->name('notifications.delete');
 
-    Route::get('/dizimos');
+    Route::get('/dizimos', [TitheController::class, 'index'])->name('tithes.index');
 });
 
 // Endereços

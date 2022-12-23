@@ -9,12 +9,16 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class FamilyController extends AdminController
 {
     public function index(): View
     {
-        $families = Family::orderBy('name', 'asc')->paginate(10);
+        $families = QueryBuilder::for(Family::class)
+                ->allowedFilters('name')
+                ->orderBy('name', 'asc')
+                ->paginate(10);
         $users = User::orderBy('name', 'asc')->get(); // Todos usuários
         $unassignedUsers = User::whereNull('family_id')->orderBy('name', 'asc')->get(); // Usuários sem família vinculada
 
