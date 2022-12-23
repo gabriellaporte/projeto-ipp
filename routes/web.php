@@ -18,13 +18,13 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
 use App\Mail\NotificationMailable;
+use App\Models\TithesOfferings\TitheOffering;
 use App\Models\User;
 use App\Notifications\AdminNotification;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Route;
-
 // Página inicial
 Route::get('/', [HomeController::class, 'index'])->name('index');
 
