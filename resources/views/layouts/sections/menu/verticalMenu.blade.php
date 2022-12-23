@@ -116,8 +116,8 @@
             </a>
         </li>
 
-        <li class="menu-item {{ request()->routeIs('admin.families.index') ? 'active' : '' }}">
-            <a href="{{ route('admin.families.index') }}" class="menu-link">
+        <li class="menu-item {{ request()->routeIs('admin.tithes.paymentType.index') ? 'active' : '' }}">
+            <a href="{{ route('admin.tithes.paymentType.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-money"></i>
                 <div>Tipos de Pagamento</div>
             </a>

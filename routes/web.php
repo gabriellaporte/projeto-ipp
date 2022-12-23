@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\FamilyController;
 use App\Http\Controllers\Admin\MemberController;
 use App\Http\Controllers\Admin\TitheController;
 use App\Http\Controllers\Admin\TithesOfferings\CategoryController;
+use App\Http\Controllers\Admin\TithesOfferings\PaymentTypeController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\AccountController;
@@ -91,6 +92,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'officer'],
     Route::post('/dizimos/categorias/store', [CategoryController::class, 'store'])->name('tithes.category.store');
     Route::put('/dizimos/categorias/update/{category}', [CategoryController::class, 'update'])->name('tithes.category.update');
     Route::delete('/dizimos/categorias/delete/{category}', [CategoryController::class, 'delete'])->name('tithes.category.delete');
+
+    Route::get('/dizimos/payment-types', [PaymentTypeController::class, 'index'])->name('tithes.paymentType.index');
+    Route::post('/dizimos/payment-types/store', [PaymentTypeController::class, 'store'])->name('tithes.paymentType.store');
+    Route::put('/dizimos/payment-types/update/{type}', [PaymentTypeController::class, 'update'])->name('tithes.paymentType.update');
+    Route::delete('/dizimos/payment-types/delete/{type}', [PaymentTypeController::class, 'delete'])->name('tithes.paymentType.delete');
 });
 
 // Endereços
